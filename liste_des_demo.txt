@@ -1,0 +1,40 @@
+le nombre d'or n'est pas un rationnel
+racine de 2 n'est pas un rationnel
+Si A est borné supérieurement, alors sup A existe dans les réels
+inégalité triangulaire à n termes
+Si la limite d'une suite existe, elle est unique
+la suite 1 + 1/2 + 1/3 + ... + 1/n tend vers l'infini
+Si une suite converge dans les réels, alors elle est bornée
+Une suite croissante converge dans les réels si et seulement si elle est bornée supérieurement
+Toute suite de Cauchy est bornée
+Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (directe)
+Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (inverse)
+le passage à la limite préserve les inégalités
+critère de l'étau pour les limites de suites
+le produit d'une suite bornée et d'une suite qui tend vers 0 tend vers 0
+limite d'une somme (suites)
+limite d'un produit (suites)
+limite d'un quotient (suites)
+existence de la limite supérieure
+f est C-Lipschitzienne sur I => f est continue sur I
+critère de l'étaux pour les limites de fonctions
+limite d'une somme (fonctions)
+limite d'un produit (fonctions)
+limite d'un quotient (fonctions)
+théorème des valeurs intermédiaires
+tout polynôme de degré impair admet au moins un zéro
+théorème du point fixe : f: [a, b] et continue => il existe un p tel que f(p)=p
+Dans les réels, tout compact non vide possède un minimum et un maximum (prouver l'un ou l'autre)
+si f est dérivable en a, alors f est continue en a
+dérivée d'une somme
+dérivée d'un produit
+dérivée de l'inverse
+dérivée de la composée
+dérivée de la fonction réciproque
+formule de Leibniz pour la dérivée d'un produit de fonctions
+théorème de Rolle
+Théorème des accroissement finis
+f est dérivable en a si et seulement si f est différentiable en a
+f est croissante si et seulement si sa dérivée est positive (même chose pour décroissante)
+on suppose c dans l'intérieur de A et f dérivable en c: si c est un extrémant local de f, alors f'(c)=0
+Si f est une fonction de classe C^k et que toutes les dérivées en x sauf la k-ieme sont nulles alors: si k est pair, x est un extrémant local et si k est impair (k>1), x est un point de selle
