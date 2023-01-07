@@ -15,7 +15,7 @@ le produit d'une suite bornée et d'une suite qui tend vers 0 tend vers 0
 limite d'une somme (suites)
 limite d'un produit (suites)
 limite d'un quotient (suites)
-existence de la limite supérieure
+existence de la limite supérieure pour toute suite bornée
 f est C-Lipschitzienne sur I => f est continue sur I
 critère de l'étaux pour les limites de fonctions
 limite d'une somme (fonctions)
