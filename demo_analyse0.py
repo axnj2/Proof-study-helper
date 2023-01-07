@@ -1,4 +1,3 @@
-from pprint import pprint
 import random
 
 
@@ -16,6 +15,7 @@ def initialize():
 
     return demo_dict
 
+
 def write_file(data: dict) -> None:
     with open("demo-scores.txt", "w") as f:
         for i in range(1,40):
@@ -28,7 +28,7 @@ studying = True
 while studying:
     dictionnary_of_demo = initialize()
 
-    probability = [dictionnary_of_demo[i][1] for i in range(1,41)]
+    probability = [float(dictionnary_of_demo[i][1]) for i in range(1,41)]
     todo = random.choices(list(range(1, 41)), weights=probability, k=1)[0]
 
     print(dictionnary_of_demo[todo][0])
