@@ -49,19 +49,6 @@ def initialize_modes():
     return MODES[user_input]
 
 
-def initionallize_score_file():
-    try:
-        with open(SCORES_FILE, "r") as f:
-            pass
-        return
-    except FileNotFoundError:
-        with open(DEMOS_FILE, "r") as f:
-            number_of_demo = len(f.readlines())
-        with open(SCORES_FILE, "w") as f:
-            f.write("1.0\n"*(number_of_demo-1) + "1.0")
-
-
-initionallize_score_file()
 mode = initialize_modes()
 studying = True
 while studying:
