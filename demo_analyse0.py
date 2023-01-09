@@ -2,8 +2,7 @@ import random
 
 AJUSTING_WEIGHTS = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new"}
-DEMOS_FILE = "liste_des_demo.txt"
-LEGACY_SCORES_FILE = "demo-scores.txt"
+
 
 def initialize_dictionnary():
     with open("liste_des_demo.txt", "r", encoding="utf-8") as f:
