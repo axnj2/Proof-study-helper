@@ -1,11 +1,7 @@
 import random
 
-AJUSTING_WEIGHTS = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
-MODES = {1: "random", 2: "new"}
-DEMOS_FILE = "liste_des_demo.txt"
-LEGACY_SCORES_FILE = "demo-scores.txt"
 
-def initialize_dictionnary():
+def initialize():
     with open("liste_des_demo.txt", "r", encoding="utf-8") as f:
         demos = f.read().splitlines()
         demo_dict = dict()
@@ -22,52 +18,23 @@ def initialize_dictionnary():
 
 def write_file(data: dict) -> None:
     with open("demo-scores.txt", "w") as f:
-        for i in range(1, len(data)):
+        for i in range(1,40):
             f.write(str(data[i][1]) + "\n")
-        f.write(str(data[len(data)][1]))
+        f.write(str(data[40][1]))
 
 
-def choose_random_with_weights():
-    probability = [float(dictionnary_of_demo[i][1]) for i in range(1, len(dictionnary_of_demo) + 1)]
-    return random.choices(list(range(1, len(dictionnary_of_demo) + 1)), weights=probability, k=1)[0]
-
-
-def choose_random_only_new():
-    new_demos = []
-    for i in range(1, len(dictionnary_of_demo) + 1):
-        if dictionnary_of_demo[i][1] == 1.0:
-            new_demos.append(i)
-    if new_demos:
-        return random.choice(new_demos), len(new_demos)
-
-
-def initialize_modes():
-    user_input = int(input("Quel mode veux-tu ?\n"
-                           "   1 : Au hasard avec des chances d'être choisie ajusté en fonction de la réussite\n"
-                           "   2 : Uniquement les nouvelles (ne fonctionne que si les démos n'ont pas encore toutes été faites)\n"
-                           "input : "))
-    return MODES[user_input]
-
-
-mode = initialize_modes()
+result_weigths = {"0":1.5, "1":0.75, "2":0.5, "3":0.1}
 studying = True
 while studying:
-    dictionnary_of_demo = initialize_dictionnary()
+    dictionnary_of_demo = initialize()
 
-    if mode == "new":
-        todo, number_of_new = choose_random_only_new()
-        if todo is None:
-            print("Tu as fait toutes les démos au moins une fois, mode changé vers random avec le poids.")
-            mode = "random"
-        else:
-            print(f"il reste {number_of_new} démonstration pas encore faites")
-    if mode == "random":
-        todo = choose_random_with_weights()
+    probability = [float(dictionnary_of_demo[i][1]) for i in range(1,41)]
+    todo = random.choices(list(range(1, 41)), weights=probability, k=1)[0]
 
     print(dictionnary_of_demo[todo][0])
     result = input("Démo réussite ? (0=pas du tout, 1=quelques erreure, 2=presque parfait et 3=prêt pour l'examen)\n")
 
-    dictionnary_of_demo[todo][1] *= AJUSTING_WEIGHTS[result]
+    dictionnary_of_demo[todo][1] *= result_weigths[result]
     print("nouveau poids :", dictionnary_of_demo[todo][1])
 
     write_file(dictionnary_of_demo)
