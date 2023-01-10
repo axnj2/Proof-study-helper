@@ -40,6 +40,8 @@ def choose_random_only_new():
             new_demos.append(i)
     if new_demos:
         return random.choice(new_demos), len(new_demos)
+    else:
+        return None, None
 
 
 def initialize_modes():
