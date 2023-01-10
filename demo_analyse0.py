@@ -2,17 +2,18 @@ import random
 
 AJUSTING_WEIGHTS = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new"}
-DEMOS_FILE = "liste_des_demo.txt"
-LEGACY_SCORES_FILE = "demo-scores.txt"
+DEMOS_FILE = "demos_analyse0.txt"
+LEGACY_SCORES_FILE = "demo-scores.txt" # to avoid breaking compatibility with older files name
+
 
 def initialize_dictionnary():
-    with open("liste_des_demo.txt", "r", encoding="utf-8") as f:
+    with open(DEMOS_FILE, "r", encoding="utf-8") as f:
         demos = f.read().splitlines()
         demo_dict = dict()
         for number, demo in enumerate(demos, 1):
             demo_dict[number] = [demo, ]
 
-    with open("demo-scores.txt", "r") as f:
+    with open(score_file, "r") as f:
         scores = map(float, f.read().splitlines())
         for number, score in enumerate(scores, 1):
             demo_dict[number].append(score)
@@ -21,7 +22,7 @@ def initialize_dictionnary():
 
 
 def write_file(data: dict) -> None:
-    with open("demo-scores.txt", "w") as f:
+    with open(score_file, "w") as f:
         for i in range(1, len(data)):
             f.write(str(data[i][1]) + "\n")
         f.write(str(data[len(data)][1]))
@@ -49,19 +50,25 @@ def initialize_modes():
     return MODES[user_input]
 
 
-def initionallize_score_file():
+def initialize_score_file():
     try:
-        with open(SCORES_FILE, "r") as f:
+        with open(LEGACY_SCORES_FILE, "r") as f:
             pass
-        return
+        score_file = LEGACY_SCORES_FILE
     except FileNotFoundError:
-        with open(DEMOS_FILE, "r") as f:
-            number_of_demo = len(f.readlines())
-        with open(SCORES_FILE, "w") as f:
-            f.write("1.0\n"*(number_of_demo-1) + "1.0")
+        score_file = DEMOS_FILE.strip(".txt") + "_scores.txt"
+        try:
+            with open(score_file, "r") as f:
+                pass
+        except FileNotFoundError:
+            with open(DEMOS_FILE, "r") as f:
+                number_of_demo = len(f.readlines())
+            with open(score_file, "w") as f:
+                f.write("1.0\n"*(number_of_demo-1) + "1.0")
+    return score_file
 
 
-initionallize_score_file()
+score_file = initialize_score_file()
 mode = initialize_modes()
 studying = True
 while studying:
