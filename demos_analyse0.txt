@@ -35,6 +35,6 @@ formule de Leibniz pour la dérivée d'un produit de fonctions
 théorème de Rolle
 Théorème des accroissement finis
 f est dérivable en a si et seulement si f est différentiable en a
-f est croissante si et seulement si sa dérivée est positive (même chose pour décroissante)
+f est croissante sur ]a, b[ si et seulement si sa dérivée est positive sur ]a, b[ (même chose pour décroissante)
 on suppose c dans l'intérieur de A et f dérivable en c: si c est un extrémant local de f, alors f'(c)=0
 Si f est une fonction de classe C^k et que toutes les dérivées en x sauf la k-ieme sont nulles alors: si k est pair, x est un extrémant local et si k est impair (k>1), x est un point de selle
