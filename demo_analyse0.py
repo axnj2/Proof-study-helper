@@ -28,17 +28,17 @@ def write_file(proofs_and_scores: dict) -> None:
         f.write(str(proofs_and_scores[len(proofs_and_scores)][1]))
 
 
-def choose_with_weights():
+def choose_with_weights(curent_proofs_and_scores):
     probability_distribution = [
-        float(proofs_and_scores[i][1]) for i in range(1, len(proofs_and_scores) + 1)
+        float(curent_proofs_and_scores[i][1]) for i in range(1, len(curent_proofs_and_scores) + 1)
     ]
-    return int(random.choices(list(range(1, len(proofs_and_scores) + 1)), weights=probability_distribution, k=1))
+    return random.choices(list(range(1, len(curent_proofs_and_scores) + 1)), weights=probability_distribution, k=1)[0]
 
 
-def choose_only_new():
+def choose_only_new(curent_proofs_and_scores):
     new_proofs = []
-    for i in range(1, len(proofs_and_scores) + 1):
-        if proofs_and_scores[i][1] == 1.0:
+    for i in range(1, len(curent_proofs_and_scores) + 1):
+        if curent_proofs_and_scores[i][1] == 1.0:
             new_proofs.append(i)
     if new_proofs:
         return random.choice(new_proofs), len(new_proofs)
@@ -46,16 +46,16 @@ def choose_only_new():
         return None, None
 
 
-def choose_next_proof(current_mode):
+def choose_next_proof(current_mode, curent_proofs_and_scores):
     if MODES[current_mode] == "new":
-        next_proof, number_of_new = choose_only_new()
+        next_proof, number_of_new = choose_only_new(curent_proofs_and_scores)
         if next_proof is None:
             print("Tu as fait toutes les démos au moins une fois, mode changé vers random avec le poids.")
             current_mode = "random"
         else:
             print(f"il reste {number_of_new} démonstration(s) pas encore faites")
     elif MODES[current_mode] == "random":
-        next_proof = choose_with_weights()
+        next_proof = choose_with_weights(curent_proofs_and_scores)
 
     return next_proof, current_mode
 
@@ -96,7 +96,7 @@ studying = True
 while studying:
     proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
 
-    current_proof, mode = choose_next_proof(mode)
+    current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
     print(proofs_and_scores[current_proof][0])
     success_assessment = input(
