@@ -82,12 +82,12 @@ while studying:
             print("Tu as fait toutes les démos au moins une fois, mode changé vers random avec le poids.")
             mode = "random"
         else:
-            print(f"il reste {number_of_new} démonstration pas encore faites")
+            print(f"il reste {number_of_new} démonstration(s) pas encore faites")
     if mode == "random":
         todo = choose_random_with_weights()
 
     print(dictionnary_of_demo[todo][0])
-    result = input("Démo réussite ? (0=pas du tout, 1=quelques erreure, 2=presque parfait et 3=prêt pour l'examen)\n")
+    result = input("Démo réussie ? (0=pas du tout, 1=quelques erreure, 2=presque parfait et 3=prêt pour l'examen)\n")
 
     dictionnary_of_demo[todo][1] *= AJUSTING_WEIGHTS[result]
     print("nouveau poids :", dictionnary_of_demo[todo][1])
