@@ -23,7 +23,7 @@ limite d'un produit (fonctions)
 limite d'un quotient (fonctions)
 théorème des valeurs intermédiaires
 tout polynôme de degré impair admet au moins un zéro
-théorème du point fixe : f: [a, b] et continue => il existe un p tel que f(p)=p
+théorème du point fixe : f: [a, b] -> [a, b] et continue => il existe un p dans [a, b] tel que f(p)=p
 Dans les réels, tout compact non vide possède un minimum et un maximum (prouver l'un ou l'autre)
 si f est dérivable en a, alors f est continue en a
 dérivée d'une somme
