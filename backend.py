@@ -48,6 +48,7 @@ def choose_only_new(curent_proofs_and_scores):
 
 def choose_next_proof(current_mode, curent_proofs_and_scores):
     """
+    TODO faire la fonction new avec la GUI
     :return: (the new proof, the new mode)
     """
     if MODES[current_mode] == "new":
@@ -82,6 +83,7 @@ def initialize_score_file(proofs_file_location):
 
 
 def initialize_mode():
+    #TODO refaire cette fonction et y associer une GUI
     user_input = int(input(
         "Quel mode voulez-vous ?\n"
         "   1 : Au hasard avec des chances d'être choisie ajusté en fonction de la réussite\n"
