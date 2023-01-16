@@ -30,7 +30,7 @@ def write_file(proofs_and_scores: dict) -> None:
 
 def choose_with_weights(curent_proofs_and_scores):
     probability_distribution = [
-        float(curent_proofs_and_scores[i][1]) for i in range(1, len(curent_proofs_and_scores) + 1)
+        curent_proofs_and_scores[i][1] for i in range(1, len(curent_proofs_and_scores) + 1)
     ]
     return random.choices(list(range(1, len(curent_proofs_and_scores) + 1)), weights=probability_distribution, k=1)[0]
 
@@ -51,10 +51,10 @@ def choose_next_proof(current_mode, curent_proofs_and_scores):
         next_proof, number_of_new = choose_only_new(curent_proofs_and_scores)
         if next_proof is None:
             print("Tu as fait toutes les démos au moins une fois, mode changé vers random avec le poids.")
-            current_mode = "random"
+            current_mode = 1
         else:
             print(f"il reste {number_of_new} démonstration(s) pas encore faites")
-    elif MODES[current_mode] == "random":
+    if MODES[current_mode] == "random":
         next_proof = choose_with_weights(curent_proofs_and_scores)
 
     return next_proof, current_mode
