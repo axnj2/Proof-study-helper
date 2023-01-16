@@ -2,13 +2,10 @@ from tkinter import *
 from tkinter import ttk
 import backend
 
-scores_file_location, mode = backend.initialize_variables()
-proof_number, proof_text, mode = backend.next_proof(mode)
-
 
 def update(result):
-    backend.update_score(proof_number, result)
-    proof_score.set(backend.get_score(proof_number))
+    backend.update_score(result)
+    proof_score.set(backend.get_score())
 
 
 def not_good():
@@ -24,10 +21,9 @@ def perfect():
 
 
 def next_proof():
-    global proof_number, proof_text, mode
-    proof_number, proof_text, mode = backend.next_proof(mode)
-    proof_display.set(proof_text)
-    proof_score.set(backend.get_score(proof_number))
+    backend.next_proof()
+    proof_display.set(backend.proof_text)
+    proof_score.set(backend.get_score())
 
 
 root = Tk()
@@ -41,7 +37,7 @@ root.rowconfigure(0, weight=1)
 ttk.Label(mainframe, text="Démo à démontrer:").grid(column=1, row=1, sticky=W)
 
 proof_display = StringVar()
-proof_display.set(proof_text)
+proof_display.set(backend.proof_text)
 ttk.Label(mainframe, textvariable=proof_display).grid(column=0, row=2, columnspan=3)
 
 
@@ -52,7 +48,7 @@ ttk.Button(mainframe, text="perfect", command=perfect).grid(column=3, row=3, sti
 ttk.Label(mainframe, text="current score on this proofs :").grid(column=1, row=4, sticky=E)
 
 proof_score = StringVar()
-proof_score.set(str(backend.get_score(proof_number)))
+proof_score.set(str(backend.get_score()))
 ttk.Label(mainframe, textvariable=proof_score).grid(column=2, row=4, sticky=W)
 ttk.Button(mainframe, text="next", command=next_proof).grid(column=3, row=4, sticky=W)
 

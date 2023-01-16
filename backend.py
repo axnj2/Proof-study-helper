@@ -95,39 +95,25 @@ def initialize_mode():
 def initialize_variables():
     return initialize_score_file(PROOFS_FILE_LOCATION), 1  # initialize_mode()
 
-def next_proof(mode):
+def next_proof():
     """
     :return: (proof number, proof text, the new mode)
     """
+    global mode, proofs_and_scores, proof_number, proof_text
     proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
     proof_number, mode = choose_next_proof(mode, proofs_and_scores)
     proof_text = proofs_and_scores[proof_number][0]
-    return proof_number, proof_text, mode
 
 
-def get_score(proof_number):
-    proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+def get_score():
     return round(proofs_and_scores[proof_number][1], 4)
 
 
-def update_score(proof_number, result):
-    proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+def update_score(result):
     proofs_and_scores[proof_number][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[result]
     write_file(proofs_and_scores)
 
 
 scores_file_location = initialize_score_file(PROOFS_FILE_LOCATION)
-
-
-
-
-if __name__ == "__main__":
-    print(proofs_and_scores[current_proof][0])
-    success_assessment = input(
-        "Démo réussie ? (0=pas du tout, 1=quelques erreurs, 2=presque parfait et 3=prêt pour l'examen)\n"
-    )
-
-    proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
-    print("nouveau poids :", proofs_and_scores[current_proof][1])
-
-    write_file(proofs_and_scores)
+mode = 1
+next_proof()
