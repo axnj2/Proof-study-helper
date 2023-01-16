@@ -8,9 +8,10 @@ The main feature is the rating system used to choose the next proof better than 
 
 - make a proof list selection fonction so that more than one proof list can be studied
 - make instructions on how to install and use
+- make an .exe with PyInstaller
 - add more demonstrations list
 - maybe make a GUI
 
 # How to help
 
-Any help with the project is welcome, try to stick to the style used in the rest of the project.
+Any help with the project is welcome, try to stick to the style used in the rest of the project. And don't hesitate to contact me on discord.
