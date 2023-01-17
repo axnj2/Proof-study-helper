@@ -1,8 +1,9 @@
 import random
 
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
-MODES = {1: "random", 2: "new"}
+MODES = {1: "random", 2: "new", 3: "stats"}
 PROOFS_FILE_LOCATION = "demos_analyse0.txt"
+STATS_FILE_LOCATION = "demos_analyse0_stats.txt"
 LEGACY_SCORES_FILE_LOCATION = "demo-scores.txt"  # to avoid breaking compatibility with older files name
 
 
@@ -20,6 +21,21 @@ def initialize_proofs_and_scores(proofs_file_location):
 
     return new_proofs_and_scores
 
+def create_stats_file():
+    with open(STATS_FILE_LOCATION, "w") as f:
+        f.write(" \n"*(len(proofs_and_scores)))
+
+def get_stats():
+    try:
+        f = open(STATS_FILE_LOCATION, 'r')
+        pass
+    except FileNotFoundError:
+        create_stats_file()
+        f = open(STATS_FILE_LOCATION, 'r')
+        pass
+    stats = f.read().splitlines()
+    stats = [list(map(int, stat.split())) for stat in stats]
+    return stats
 
 def write_file(proofs_and_scores: dict) -> None:
     with open(scores_file_location, "w") as f:
@@ -27,6 +43,18 @@ def write_file(proofs_and_scores: dict) -> None:
             f.write(str(proofs_and_scores[i][1]) + "\n")
         f.write(str(proofs_and_scores[len(proofs_and_scores)][1]))
 
+def write_stats(proofs_and_scores: dict, demo: int, score: int) -> None:
+    try:
+        file = open(STATS_FILE_LOCATION, 'r')
+        pass
+    except FileNotFoundError:
+        create_stats_file()
+        file = open(STATS_FILE_LOCATION, 'r')
+        pass
+    data = file.readlines()
+    data[demo - 1] = data[demo - 1].strip() + " " + str(score) + "\n"
+    with open(STATS_FILE_LOCATION, 'w') as file:
+        file.writelines( data )
 
 def choose_with_weights(curent_proofs_and_scores):
     probability_distribution = [
@@ -80,30 +108,87 @@ def initialize_score_file(proofs_file_location):
 
 def initialize_mode():
     user_input = int(input(
-        "Quel mode voulez-vous ?\n"
-        "   1 : Au hasard avec des chances d'être choisie ajusté en fonction de la réussite\n"
-        "   2 : Uniquement les nouvelles (ne fonctionne que si les démos n'ont pas encore toutes été faites)\n"
-        "input : "
+        "Que veux tu faire ?\n"
+        "   1 : Faire des démonstrations aléatoirement\n"
+        "   2 : Faire des démonstrations pas encore faites\n"
+        "   3 : Voir les statistiques de ma progression\n"
+        "Input : "
     ))
     if user_input not in MODES:
-        raise Exception(f'"{user_input}" is not one of the supported modes')
+        raise Exception(f'"{user_input}" is not one of the supported actions')
     return user_input
 
 
 scores_file_location = initialize_score_file(PROOFS_FILE_LOCATION)
 mode = initialize_mode()
+while(mode == 3): # Stats mode
+    proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+    data = get_stats()
+    moyennes = []
+    maxs = []
+    for i in range(len(data)):
+        if(len(data[i]) != 0):
+            maxs.append(max(data[i]))
+        else:
+            maxs.append(0)
+        if(len(data[i]) == 0):
+            moyennes.append(-1)
+            continue
+        moyennes.append(sum(data[i])/len(data[i]))
+
+    max_possible = max([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
+    min_possible = min([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
+    space = max_possible - min_possible
+    liste = [m for m in moyennes if m != -1] if len([m for m in moyennes if m != -1]) != 0 else [0]
+    print(f"\nTa moyenne est de {round(sum(liste)/len(liste), 2)}/{max_possible} sur celles que tu as déjà faites")
+    print(f"Tu as fait {len([m for m in moyennes if m != -1])} démonstrations sur {len(proofs_and_scores)}")
+    # Create a score for everything considering only the maxs considering that 100% is when all the maxes are the max of the keys of FACTORS_FOR_WEIGHT_ADJUSTMENT
+    values = list(FACTORS_FOR_WEIGHTS_ADJUSTING.values())
+    scores_per_value = [(min_possible+i)/space for i in range(len(values))]
+    score = sum([scores_per_value[maxs[i]] for i in range(len(maxs))])/len(maxs)
+    print(f"Ton score total est de {round(score, 2)}%\n")
+    stats_a = int(input(
+        "Que veux tu faire ? \n"
+        "   0 : Voir Des informations sur chaque démo\n"
+        "   1 : Revenir en arrière\n"
+        "input : "
+    ))
+    if(stats_a == 1):
+        mode = initialize_mode()
+    else:
+        proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+        for i in range(len(data)):
+            print(f"\n\033[91m\033[1m" + proofs_and_scores[i+1][0] + "\033[0m")
+            print(f"Elle a une moyenne de {moyennes[i] == -1 and '<pas encore faite>' or moyennes[i]}/{max_possible}")
+            print(f"Elle a un max de {maxs[i]}")
+            print(f"Elle a été faite {len(data[i])} fois")
+            print(f"Les notes sont {data[i]}")
+        mode = initialize_mode()
+
 studying = True
 while studying:
     proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
 
     current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
-    print(proofs_and_scores[current_proof][0])
+    print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0]+ "\033[0m")
     success_assessment = input(
-        "Démo réussie ? (0=pas du tout, 1=quelques erreurs, 2=presque parfait et 3=prêt pour l'examen)\n"
+        "Démo réussie ? \n"
+        "   0 : Pas du tout\n"
+        "   1 : Quelques erreurs\n"
+        "   2 : Presque parfait\n"
+        "   3 : Prêt pour l'examen\n"
+        "   4 : S'arrêter ici\n"
+        "input : "
     )
+    if(success_assessment == "4"):
+        studying = False
+        break
+    while(success_assessment not in FACTORS_FOR_WEIGHTS_ADJUSTING):
+        success_assessment = input("Input invalide, réessaye : ")
 
     proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
-    print("nouveau poids :", proofs_and_scores[current_proof][1])
+    print("Nouveau poids :", proofs_and_scores[current_proof][1])
 
     write_file(proofs_and_scores)
+    write_stats(proofs_and_scores, current_proof, success_assessment)
