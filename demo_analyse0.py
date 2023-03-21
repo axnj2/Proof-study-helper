@@ -100,11 +100,11 @@ def write_file(proofs_and_scores: dict, file_path: str) -> None:
         f.write(str(proofs_and_scores[len(proofs_and_scores)][1]))
 
 
-def write_stats(file_path: str, demo: int, score: int) -> None:
+def write_stats(file_path: str, demo: int, score: str) -> None:
     with open(file_path, 'r') as file:
         data = file.readlines()
 
-    data[demo - 1] = data[demo - 1].strip() + " " + str(score) + "\n"
+    data[demo - 1] = data[demo - 1].strip() + " " + score + "\n"
 
     with open(file_path, 'w') as file:
         file.writelines(data)
@@ -217,8 +217,7 @@ if __name__ == "__main__":
         stats_interface(proofs_and_scores)
         mode = initialize_mode()
 
-    studying = True
-    while studying:
+    while True:
         proofs_and_scores = initialize_from_file(proof_list_path, scores_file_path)
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
@@ -234,7 +233,6 @@ if __name__ == "__main__":
             "input : "
         )
         if success_assessment == "4":
-            studying = False
             break
         while success_assessment not in FACTORS_FOR_WEIGHTS_ADJUSTING:
             success_assessment = input("Input invalide, réessaye : ")
