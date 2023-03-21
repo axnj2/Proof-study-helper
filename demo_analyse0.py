@@ -1,28 +1,47 @@
 import random
+import os
 
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
+PROOFS_DIRECTORY = "proof_lists/"
+DATA_DIRECTORY = "data/"
 PROOFS_FILE_LOCATION = "proof_lists/demos_analyse0.txt"
 STATS_FILE_LOCATION = "proof_lists/demos_analyse0_stats.txt"
 LEGACY_SCORES_FILE_LOCATION = "demo-scores.txt"  # to avoid breaking compatibility with older files name
 
 
-def initialize_score_file(proofs_file_location):
+def choose_proof_list():
+    def discover_proofs_lists():
+        with os.scandir(PROOFS_DIRECTORY) as proof_files:
+            return [file.name for file in proof_files]
+
+    list_of_proofs_lists = discover_proofs_lists()
+
+    print("Choisissez les démos à étudier :")
+    print("\n".join(list(f"{i} : {name.strip('.txt')}" for i, name in enumerate(list_of_proofs_lists))))
+    proof_list_choice = int(input(
+        "Input : "
+    ))
+    return list_of_proofs_lists[proof_list_choice]
+
+
+def initialize_score_file(proofs_file_name: str) -> str:
+    """
+    :return: score file relative path
+    """
+    if not os.path.isdir(DATA_DIRECTORY):
+        os.mkdir(DATA_DIRECTORY)
+
+    score_file_relative_path = DATA_DIRECTORY + proofs_file_name.strip(".txt") + "_scores.txt"
     try:
-        with open(LEGACY_SCORES_FILE_LOCATION, "r"):
+        with open(score_file_relative_path, "r"):
             pass
-        score_file = LEGACY_SCORES_FILE_LOCATION
     except FileNotFoundError:
-        score_file = proofs_file_location.strip(".txt") + "_scores.txt"
-        try:
-            with open(score_file, "r"):
-                pass
-        except FileNotFoundError:
-            with open(proofs_file_location, "r") as f:
-                number_of_demo = len(f.readlines())
-            with open(score_file, "w") as f:
-                f.write("1.0\n" * (number_of_demo - 1) + "1.0")
-    return score_file
+        with open(PROOFS_DIRECTORY+proofs_file_name, "r") as f:
+            number_of_demo = len(f.readlines())
+        with open(score_file_relative_path, "w") as f:
+            f.write("1.0\n" * (number_of_demo - 1) + "1.0")
+    return score_file_relative_path
 
 
 def initialize_proofs_and_scores(proofs_file_location):
@@ -173,39 +192,43 @@ def stats_interface(proofs_and_scores):
         precise_stats(max_possible, maxs, moyennes)
 
 
-scores_file_location = initialize_score_file(PROOFS_FILE_LOCATION)
-mode = initialize_mode()
-proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
-data = get_stats()
 
-while mode == 3:
-    stats_interface(proofs_and_scores)
+if __name__ == "__main__":
+
+    proof_list_name = choose_proof_list()
+    scores_file_location = initialize_score_file(proof_list_name)
     mode = initialize_mode()
-
-studying = True
-while studying:
     proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+    data = get_stats()
 
-    current_proof, mode = choose_next_proof(mode, proofs_and_scores)
+    while mode == 3:
+        stats_interface(proofs_and_scores)
+        mode = initialize_mode()
 
-    print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
-    success_assessment = input(
-        "Démo réussie ? \n"
-        "   0 : Pas du tout\n"
-        "   1 : Quelques erreurs\n"
-        "   2 : Presque parfait\n"
-        "   3 : Prêt pour l'examen\n"
-        "   4 : S'arrêter ici\n"
-        "input : "
-    )
-    if success_assessment == "4":
-        studying = False
-        break
-    while success_assessment not in FACTORS_FOR_WEIGHTS_ADJUSTING:
-        success_assessment = input("Input invalide, réessaye : ")
+    studying = True
+    while studying:
+        proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
 
-    proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
-    print("Nouveau poids :", proofs_and_scores[current_proof][1])
+        current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
-    write_file(proofs_and_scores)
-    write_stats(proofs_and_scores, current_proof, success_assessment)
+        print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
+        success_assessment = input(
+            "Démo réussie ? \n"
+            "   0 : Pas du tout\n"
+            "   1 : Quelques erreurs\n"
+            "   2 : Presque parfait\n"
+            "   3 : Prêt pour l'examen\n"
+            "   4 : S'arrêter ici\n"
+            "input : "
+        )
+        if success_assessment == "4":
+            studying = False
+            break
+        while success_assessment not in FACTORS_FOR_WEIGHTS_ADJUSTING:
+            success_assessment = input("Input invalide, réessaye : ")
+
+        proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
+        print("Nouveau poids :", proofs_and_scores[current_proof][1])
+
+        write_file(proofs_and_scores)
+        write_stats(proofs_and_scores, current_proof, success_assessment)
