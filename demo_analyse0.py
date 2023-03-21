@@ -180,21 +180,20 @@ def stats_interface(proofs_and_scores):
 
     averages = []
     maxs = []
+    averages_excluding_not_done_yet = []
     for proof_result_history in stats_data:
-        success_score = list(map(get_normalised_success_score, proof_result_history))
-        if len(success_score) != 0:
-            maxs.append(max(success_score))
-            averages.append(mean(success_score))
+        success_scores = list(map(get_normalised_success_score, proof_result_history))
+        if len(success_scores) != 0:
+            maxs.append(max(success_scores))
+            averages.append(mean(success_scores))
+            averages_excluding_not_done_yet.append(mean(success_scores))
         else:
             maxs.append(None)
             averages.append(-1)
 
-    # max_possible = max(map(get_normalised_success_score, [int(el) for el in FACTORS_FOR_WEIGHTS_ADJUSTING.keys()]))
-    # min_possible = min(map(get_normalised_success_score, [int(el) for el in FACTORS_FOR_WEIGHTS_ADJUSTING.keys()]))
-    if len([m for m in averages if m != -1]) != 0:
-        averages_excluding_not_done_yet = [m for m in averages if m != -1]
-    else:
-        averages_excluding_not_done_yet = [0]
+    if len(averages_excluding_not_done_yet) == 0:
+        print("Tu n'as pas encore fait de démonstration, les stats ne sont pas encore disponibles !")
+        return
 
     print("\n-----------------------------------------------\n\n")
     print(f"Tu as fait {len([m for m in averages if m != -1])} démonstrations sur {len(proofs_and_scores)}")
