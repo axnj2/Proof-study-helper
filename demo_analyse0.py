@@ -5,7 +5,7 @@ FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
 PROOFS_DIRECTORY = "proof_lists/"
 DATA_DIRECTORY = "data/"
-STARTING_WEIHT = 1.0
+STARTING_WEIGHT = 1.0
 
 
 
@@ -19,7 +19,7 @@ def choose_proof_list():
     list_of_proofs_lists = discover_proofs_lists()
 
     print("Choisissez les démos à étudier :")
-    print("\n".join(list(f"{i} : {name.strip('.txt')}" for i, name in enumerate(list_of_proofs_lists))))
+    print("\n".join(list(f"{i} : {name[:-4]}" for i, name in enumerate(list_of_proofs_lists))))
     proof_list_choice = int(input(
         "Input : "
     ))
@@ -35,7 +35,11 @@ def prepare_file(path: str, fill: str, number_of_lines: int) -> None:
             f.write( (fill + "\n") * (number_of_lines - 1) + fill)
 
 
-def initialize_score_file(proofs_file_name: str) -> str:
+def new_file_name(proofs_file_name, data_name):
+    return DATA_DIRECTORY + proofs_file_name[:-4] + "_" + data_name + ".txt"
+
+
+def initialize_score_file(list_name: str) -> str:
     """
     creates the score file and data directory if they don't exist
     :return: score file relative path
@@ -43,13 +47,35 @@ def initialize_score_file(proofs_file_name: str) -> str:
     if not os.path.isdir(DATA_DIRECTORY):
         os.mkdir(DATA_DIRECTORY)
 
-    score_file_relative_path = DATA_DIRECTORY + proofs_file_name.strip(".txt") + "_scores.txt"
-    with open(PROOFS_DIRECTORY + proofs_file_name, "r") as f:
+    score_file_relative_path = new_file_name(list_name, "scores")
+    with open(PROOFS_DIRECTORY + list_name, "r") as f:
         number_of_demo = len(f.readlines())
 
-    prepare_file(score_file_relative_path, str(STARTING_WEIHT), number_of_demo)
+    prepare_file(score_file_relative_path, str(STARTING_WEIGHT), number_of_demo)
 
     return score_file_relative_path
+
+
+
+def get_stats(list_name: str, data_dir: str, number_of_proofs) -> (list, str):
+    """
+    :param list_name: the name of the proof file
+    :param data_dir: the directory where the stats are stored
+    :return: stats and stats file path
+    """
+    def create_stats_file(file_path):
+        with open(file_path, "w") as f:
+            f.write(" \n" * (len(proofs_and_scores)))
+
+    stats_data_file_path = new_file_name(list_name, "history")
+
+    prepare_file(stats_data_file_path, " ", number_of_proofs)
+
+    with open(stats_data_file_path, 'r') as f:
+        stats = f.read().splitlines()
+
+    stats = [list(map(int, stat.split())) for stat in stats]
+    return stats, stats_data_file_path
 
 
 def initialize_from_file(proofs_file, scores_file):
@@ -65,28 +91,6 @@ def initialize_from_file(proofs_file, scores_file):
             new_proofs_and_scores[proof_number].append(score)
 
     return new_proofs_and_scores
-
-
-def get_stats(list_name: str, data_dir: str, number_of_proofs) -> (list, str):
-    """
-    :param list_name: the name of the proof file
-    :param data_dir: the directory where the stats are stored
-    :return: stats and stats file path
-    """
-    def create_stats_file(file_path):
-        with open(file_path, "w") as f:
-            f.write(" \n" * (len(proofs_and_scores)))
-
-    stats_data_file_name = list_name.strip(".txt") + "_history.txt"
-    stats_data_file_path = data_dir + stats_data_file_name
-
-    prepare_file(stats_data_file_path, " ", number_of_proofs)
-
-    with open(stats_data_file_path, 'r') as f:
-        stats = f.read().splitlines()
-
-    stats = [list(map(int, stat.split())) for stat in stats]
-    return stats, stats_data_file_path
 
 
 def write_file(proofs_and_scores: dict, file_path: str) -> None:
@@ -153,7 +157,6 @@ def initialize_mode():
 
 def stats_interface(proofs_and_scores):
     def precise_stats(max_possible, maxs, moyennes):
-
         for proof_number in range(len(stats_data)):
             print(f"\n\033[91m\033[1m" + proofs_and_scores[proof_number + 1][0] + "\033[0m")
             print(
@@ -188,7 +191,7 @@ def stats_interface(proofs_and_scores):
     scores_per_value = [(min_possible + i) / space for i in range(len(values))]
     score = sum([scores_per_value[maxs[i]] for i in range(len(maxs))]) / len(maxs)
 
-    print(f"Ton score total est de {round(score, 2)}%\n")
+    print(f"Ton score total est de {round(score, 2)*100}%\n")
 
     continue_status = int(input(
         "Que veux tu faire ? \n"
