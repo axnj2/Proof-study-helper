@@ -1,5 +1,7 @@
 import random
 import os
+from statistics import mean
+
 
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
@@ -156,42 +158,53 @@ def initialize_mode():
 
 
 def stats_interface(proofs_and_scores):
-    def precise_stats(max_possible, maxs, moyennes):
+    def precise_stats(maxs, moyennes):
         for proof_number in range(len(stats_data)):
             print(f"\n\033[91m\033[1m" + proofs_and_scores[proof_number + 1][0] + "\033[0m")
-            print(
-                f"Elle a une moyenne de {moyennes[proof_number] == -1 and '<pas encore faite>' or moyennes[proof_number]}/{max_possible}")
-            print(f"Elle a un max de {maxs[proof_number]}")
-            print(f"Elle a été faite {len(stats_data[proof_number])} fois")
-            print(f"Les notes sont {stats_data[proof_number]}")
+            if moyennes[proof_number] != -1:
+                print(f"Elle a une moyenne de {moyennes[proof_number]*20}/{20}")
+                print(f"Elle a un max de {maxs[proof_number]}")
+                print(f"Elle a été faite {len(stats_data[proof_number])} fois")
+                print(f"Les notes sont {stats_data[proof_number]}")
+                print(f"poids actuel : {proofs_and_scores[proof_number+1][1]}")
+            else:
+                print("Pas encore faite")
 
-    moyennes = []
+    def get_normalised_success_score(choice):
+        min_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING["0"]
+        max_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING["3"]
+        current_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING[str(choice)]
+        # min max scaling
+        normalized_value = (current_value - min_value) / (max_value-min_value)
+        return normalized_value
+
+    averages = []
     maxs = []
-    for i in range(len(stats_data)):
-        if len(stats_data[i]) != 0:
-            maxs.append(max(stats_data[i]))
+    for proof_result_history in stats_data:
+        success_score = list(map(get_normalised_success_score, proof_result_history))
+        if len(success_score) != 0:
+            maxs.append(max(success_score))
+            averages.append(mean(success_score))
         else:
-            maxs.append(0)
-        if len(stats_data[i]) == 0:
-            moyennes.append(-1)
-            continue
-        moyennes.append(sum(stats_data[i]) / len(stats_data[i]))
+            maxs.append(None)
+            averages.append(-1)
 
-    max_possible = max([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
-    min_possible = min([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
-    space = max_possible - min_possible
-    liste = [m for m in moyennes if m != -1] if len([m for m in moyennes if m != -1]) != 0 else [0]
+    # max_possible = max(map(get_normalised_success_score, [int(el) for el in FACTORS_FOR_WEIGHTS_ADJUSTING.keys()]))
+    # min_possible = min(map(get_normalised_success_score, [int(el) for el in FACTORS_FOR_WEIGHTS_ADJUSTING.keys()]))
+    if len([m for m in averages if m != -1]) != 0:
+        averages_excluding_not_done_yet = [m for m in averages if m != -1]
+    else:
+        averages_excluding_not_done_yet = [0]
 
-    print(
-        f"\nTa moyenne est de {round(sum(liste) / len(liste), 2)}/{max_possible} sur celles que tu as déjà faites")
-    print(f"Tu as fait {len([m for m in moyennes if m != -1])} démonstrations sur {len(proofs_and_scores)}")
+    print("\n-----------------------------------------------\n\n")
+    print(f"Tu as fait {len([m for m in averages if m != -1])} démonstrations sur {len(proofs_and_scores)}")
+    print(f"Ta moyenne est de "
+          f"{round((sum(averages_excluding_not_done_yet) / len(averages_excluding_not_done_yet))*20, 2)}/20"
+          f"sur celles que tu as déjà faites")
 
-    # Create a score for everything considering only the maxs considering that 100% is when all the maxes are the max of the keys of FACTORS_FOR_WEIGHT_ADJUSTMENT
-    values = list(FACTORS_FOR_WEIGHTS_ADJUSTING.values())
-    scores_per_value = [(min_possible + i) / space for i in range(len(values))]
-    score = sum([scores_per_value[maxs[i]] for i in range(len(maxs))]) / len(maxs)
+    total_score = sum(averages_excluding_not_done_yet)/ len(averages)
 
-    print(f"Ton score total est de {round(score, 2)*100}%\n")
+    print(f"Ton score total est de {round(total_score*20, 2)}/20\n")
 
     continue_status = int(input(
         "Que veux tu faire ? \n"
@@ -200,7 +213,7 @@ def stats_interface(proofs_and_scores):
         "input : "
     ))
     if continue_status == 0:
-        precise_stats(max_possible, maxs, moyennes)
+        precise_stats(maxs, averages)
 
 
 
