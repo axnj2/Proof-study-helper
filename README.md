@@ -6,11 +6,11 @@ The main feature is the rating system used to choose the next proof better than 
 
 ## TODO/ideas
 
-- make a proof list selection fonction so that more than one proof list can be studied
-- make instructions on how to install and use
-- make an .exe with PyInstaller
-- add more demonstrations list
-- maybe make a GUI
+- [X] make a proof list selection fonction so that more than one proof list can be studied
+- [ ] add more demonstrations list
+- [ ] make instructions on how to install and use
+- [ ] improve the stat feature
+
 
 # How to help
 
