@@ -44,7 +44,7 @@ def initialize_score_file(proofs_file_name: str) -> str:
     return score_file_relative_path
 
 
-def initialize_proofs_and_scores(proofs_file_location):
+def initialize_proofs_and_scores(proofs_file_location, scores_file_location):
     with open(proofs_file_location, "r", encoding="utf-8") as f:
         proofs_prompt = f.read().splitlines()
         new_proofs_and_scores = dict()
@@ -59,42 +59,45 @@ def initialize_proofs_and_scores(proofs_file_location):
     return new_proofs_and_scores
 
 
-def create_stats_file():
-    with open(STATS_FILE_LOCATION, "w") as f:
-        f.write(" \n" * (len(proofs_and_scores)))
+def get_stats(list_name: str, data_dir: str) -> (list, str):
+    """
+    :param list_name: the name of the proof file
+    :param data_dir: the directory where the stats are stored
+    :return: stats and stats file path
+    """
+    def create_stats_file(file_path):
+        with open(file_path, "w") as f:
+            f.write(" \n" * (len(proofs_and_scores)))
 
+    stats_data_file_name = list_name.strip(".txt") + "_stats.txt"
+    stats_data_file_path = data_dir + stats_data_file_name
 
-def get_stats():
     try:
-        f = open(STATS_FILE_LOCATION, 'r')
-        pass
+        with open(stats_data_file_path, 'r') as f:
+            stats = f.read().splitlines()
     except FileNotFoundError:
-        create_stats_file()
-        f = open(STATS_FILE_LOCATION, 'r')
-        pass
-    stats = f.read().splitlines()
+        create_stats_file(stats_data_file_path)
+        with open(stats_data_file_path, 'r') as f:
+            stats = f.read().splitlines()
+
     stats = [list(map(int, stat.split())) for stat in stats]
-    return stats
+    return stats, stats_data_file_path
 
 
-def write_file(proofs_and_scores: dict) -> None:
-    with open(scores_file_location, "w") as f:
+def write_file(proofs_and_scores: dict, file_path: str) -> None:
+    with open(file_path, "w") as f:
         for i in range(1, len(proofs_and_scores)):
             f.write(str(proofs_and_scores[i][1]) + "\n")
         f.write(str(proofs_and_scores[len(proofs_and_scores)][1]))
 
 
-def write_stats(proofs_and_scores: dict, demo: int, score: int) -> None:
-    try:
-        file = open(STATS_FILE_LOCATION, 'r')
-        pass
-    except FileNotFoundError:
-        create_stats_file()
-        file = open(STATS_FILE_LOCATION, 'r')
-        pass
-    data = file.readlines()
+def write_stats(file_path: str, demo: int, score: int) -> None:
+    with open(file_path, 'r') as file:
+        data = file.readlines()
+
     data[demo - 1] = data[demo - 1].strip() + " " + str(score) + "\n"
-    with open(STATS_FILE_LOCATION, 'w') as file:
+
+    with open(file_path, 'w') as file:
         file.writelines(data)
 
 
@@ -146,25 +149,25 @@ def initialize_mode():
 def stats_interface(proofs_and_scores):
     def precise_stats(max_possible, maxs, moyennes):
 
-        for proof_number in range(len(data)):
+        for proof_number in range(len(stats_data)):
             print(f"\n\033[91m\033[1m" + proofs_and_scores[proof_number + 1][0] + "\033[0m")
             print(
                 f"Elle a une moyenne de {moyennes[proof_number] == -1 and '<pas encore faite>' or moyennes[proof_number]}/{max_possible}")
             print(f"Elle a un max de {maxs[proof_number]}")
-            print(f"Elle a été faite {len(data[proof_number])} fois")
-            print(f"Les notes sont {data[proof_number]}")
+            print(f"Elle a été faite {len(stats_data[proof_number])} fois")
+            print(f"Les notes sont {stats_data[proof_number]}")
 
     moyennes = []
     maxs = []
-    for i in range(len(data)):
-        if len(data[i]) != 0:
-            maxs.append(max(data[i]))
+    for i in range(len(stats_data)):
+        if len(stats_data[i]) != 0:
+            maxs.append(max(stats_data[i]))
         else:
             maxs.append(0)
-        if len(data[i]) == 0:
+        if len(stats_data[i]) == 0:
             moyennes.append(-1)
             continue
-        moyennes.append(sum(data[i]) / len(data[i]))
+        moyennes.append(sum(stats_data[i]) / len(stats_data[i]))
 
     max_possible = max([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
     min_possible = min([int(el) for el in list(FACTORS_FOR_WEIGHTS_ADJUSTING.keys())])
@@ -196,10 +199,11 @@ def stats_interface(proofs_and_scores):
 if __name__ == "__main__":
 
     proof_list_name = choose_proof_list()
-    scores_file_location = initialize_score_file(proof_list_name)
+    proof_list_path = PROOFS_DIRECTORY + proof_list_name
+    scores_file_path = initialize_score_file(proof_list_name)
     mode = initialize_mode()
-    proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
-    data = get_stats()
+    proofs_and_scores = initialize_proofs_and_scores(proof_list_path, scores_file_path)
+    stats_data, stats_file_path = get_stats(proof_list_name, DATA_DIRECTORY)
 
     while mode == 3:
         stats_interface(proofs_and_scores)
@@ -207,7 +211,7 @@ if __name__ == "__main__":
 
     studying = True
     while studying:
-        proofs_and_scores = initialize_proofs_and_scores(PROOFS_FILE_LOCATION)
+        proofs_and_scores = initialize_proofs_and_scores(proof_list_path, scores_file_path)
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
@@ -230,5 +234,5 @@ if __name__ == "__main__":
         proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
         print("Nouveau poids :", proofs_and_scores[current_proof][1])
 
-        write_file(proofs_and_scores)
-        write_stats(proofs_and_scores, current_proof, success_assessment)
+        write_file(proofs_and_scores, scores_file_path)
+        write_stats(stats_file_path, current_proof, success_assessment)
