@@ -8,9 +8,17 @@ MODES = {1: "random", 2: "new", 3: "stats"}
 PROOFS_DIRECTORY = "proof_lists/"
 DATA_DIRECTORY = "data/"
 STARTING_WEIGHT = 1.0
-
-
-
+ASCII_ART = r"""
+ ____                          ___      ____    __                __              __  __          ___                            
+/\  _`\                      /'___\    /\  _`\ /\ \__            /\ \            /\ \/\ \        /\_ \                           
+\ \ \L\ \_ __   ___     ___ /\ \__/    \ \,\L\_\ \ ,_\  __  __   \_\ \  __  __   \ \ \_\ \     __\//\ \    _____      __   _ __  
+ \ \ ,__/\`'__\/ __`\  / __`\ \ ,__\    \/_\__ \\ \ \/ /\ \/\ \  /'_` \/\ \/\ \   \ \  _  \  /'__`\\ \ \  /\ '__`\  /'__`\/\`'__\
+  \ \ \/\ \ \//\ \L\ \/\ \L\ \ \ \_/      /\ \L\ \ \ \_\ \ \_\ \/\ \L\ \ \ \_\ \   \ \ \ \ \/\  __/ \_\ \_\ \ \L\ \/\  __/\ \ \/ 
+   \ \_\ \ \_\\ \____/\ \____/\ \_\       \ `\____\ \__\\ \____/\ \___,_\/`____ \   \ \_\ \_\ \____\/\____\\ \ ,__/\ \____\\ \_\ 
+    \/_/  \/_/ \/___/  \/___/  \/_/        \/_____/\/__/ \/___/  \/__,_ /`/___/> \   \/_/\/_/\/____/\/____/ \ \ \/  \/____/ \/_/ 
+                                                                            /\___/                           \ \_\               
+                                                                            \/__/                             \/_/               
+"""
 
 
 def choose_proof_list():
@@ -34,7 +42,7 @@ def prepare_file(path: str, fill: str, number_of_lines: int) -> None:
             pass
     except FileNotFoundError:
         with open(path, "w") as f:
-            f.write( (fill + "\n") * (number_of_lines - 1) + fill)
+            f.write((fill + "\n") * (number_of_lines - 1) + fill)
 
 
 def new_file_name(proofs_file_name, data_name):
@@ -58,11 +66,9 @@ def initialize_score_file(list_name: str) -> str:
     return score_file_relative_path
 
 
-
-def get_stats(list_name: str, data_dir: str, number_of_proofs) -> (list, str):
+def get_stats(list_name: str, number_of_proofs) -> (list, str):
     """
     :param list_name: the name of the proof file
-    :param data_dir: the directory where the stats are stored
     :return: stats and stats file path
     """
     def create_stats_file(file_path):
@@ -215,15 +221,15 @@ def stats_interface(proofs_and_scores):
         precise_stats(maxs, averages)
 
 
-
 if __name__ == "__main__":
+    print(ASCII_ART)
 
     proof_list_name = choose_proof_list()
     proof_list_path = PROOFS_DIRECTORY + proof_list_name
     scores_file_path = initialize_score_file(proof_list_name)
     mode = initialize_mode()
     proofs_and_scores = initialize_from_file(proof_list_path, scores_file_path)
-    stats_data, stats_file_path = get_stats(proof_list_name, DATA_DIRECTORY, len(proofs_and_scores))
+    stats_data, stats_file_path = get_stats(proof_list_name, len(proofs_and_scores))
 
     while mode == 3:
         stats_interface(proofs_and_scores)
