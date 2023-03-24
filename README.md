@@ -1,4 +1,4 @@
-# Help me find a name
+# Proof study helper
 
 Hi ! the goal of this project is to create a tool to prompt you with proposition to proove or generaly test your knowledge and help you study.
 
