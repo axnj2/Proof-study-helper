@@ -87,12 +87,13 @@ def initialize_from_files(proofs_file, scores_file, stats_file):
         for proof in proofs_prompt:
             number, prompt = proof.split("|")
             number = int(number)
-            new_proofs_and_scores[number] = [proof]
+            new_proofs_and_scores[number] = [prompt]
 
     with open(scores_file, "r") as f:
         raw_scores = f.read().splitlines()
         for raw_score in raw_scores:
             number, score = raw_score.split("|")
+            number = int(number)
             score = float(score)
             new_proofs_and_scores[number].append(score)
 
@@ -105,35 +106,35 @@ def initialize_from_files(proofs_file, scores_file, stats_file):
         raw_stats = f.read().splitlines()
         for raw_stat in raw_stats:
             number, stat = raw_stat.split("|")
+            number = int(number)
             stat = list(map(int, stat.split()))
             new_proofs_and_scores[number].append(stat)
 
     # add empty list if it's a new proof
     for i in new_proofs_and_scores:
-        if len(new_proofs_and_scores) == 2:
+        if len(new_proofs_and_scores[i]) == 2:
             new_proofs_and_scores[i].append([])
 
     return new_proofs_and_scores
 
 
-def write_file(proofs_and_scores: dict, file_path: str) -> None:
-    with open(file_path, "w") as f:
+def write_file(proofs_and_scores: dict, score_path: str, stats_path: str) -> None:
+    with open(score_path, "w") as f:
         output = ""
         for i in proofs_and_scores.keys():
-            output += str(proofs_and_scores[i][1]) + "\n"
+            output += str(i) + "|" + str(proofs_and_scores[i][1]) + "\n"
         output = output[:-1]
         f.write(output)
 
-
-def write_stats(file_path: str, stats: list) -> None:
-    with open(file_path, 'w') as file:
-        for i in range(len(stats)):
-            line = ""
-            for j in stats[i]:
-                line += str(j+" ")
-            if i != len(stats)-1:
-                line += "\n"
-            file.write(line)
+    with open(stats_path, "w") as f:
+        output = ""
+        for i in proofs_and_scores.keys():
+            output += str(i) + "|"
+            for result in proofs_and_scores[i][2]:
+                output += str(result) + " "
+            output += "\n"
+        output = output[:-1]
+        f.write(output)
 
 
 def choose_with_weights(curent_proofs_and_scores):
@@ -181,7 +182,7 @@ def initialize_mode():
     return user_input
 
 
-def stats_interface(proofs_and_scores):
+def stats_interface(proofs_and_scores): # currently broken
     def precise_stats(maxs, moyennes):
         for proof_number in range(len(stats_data)):
             print(f"\n\033[91m\033[1m" + proofs_and_scores[proof_number + 1][0] + "\033[0m")
@@ -274,7 +275,6 @@ if __name__ == "__main__":
 
         proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
         print("Nouveau poids :", proofs_and_scores[current_proof][1])
-        stats_data[current_proof-1].append(success_assessment)
+        proofs_and_scores[current_proof][2].append(success_assessment)
 
-        write_file(proofs_and_scores, scores_file_path)
-        write_stats(stats_file_path, stats_data)
+        write_file(proofs_and_scores, scores_file_path, stats_file_path)
