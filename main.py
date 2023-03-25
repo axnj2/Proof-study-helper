@@ -36,86 +36,104 @@ def choose_proof_list():
     return list_of_proofs_lists[proof_list_choice]
 
 
-def prepare_file(path: str, fill: str, number_of_lines: int) -> None:
-    try:
-        with open(path, "r") as f:
-            pass
-    except FileNotFoundError:
-        with open(path, "w") as f:
-            f.write((fill + "\n") * (number_of_lines - 1) + fill)
+def initialize_files_path(proof_list_name):
+    def prepare_file(path: str) -> None:
+        try:
+            with open(path, "r") as f:
+                pass
+        except FileNotFoundError:
+            with open(path, "w") as f:
+                pass
 
+    def new_file_name(proofs_file_name, data_name):
+        return DATA_DIRECTORY + proofs_file_name[:-4] + "_" + data_name + ".txt"
 
-def new_file_name(proofs_file_name, data_name):
-    return DATA_DIRECTORY + proofs_file_name[:-4] + "_" + data_name + ".txt"
+    def initialize_stats_file(list_name: str) -> (list, str):
+        """
+        :param list_name: the name of the proof file
+        :return: stats and stats file path
+        """
+        stats_data_file_path = new_file_name(list_name, "history")
 
+        prepare_file(stats_data_file_path)
 
-def initialize_score_file(list_name: str) -> str:
-    """
-    creates the score file and data directory if they don't exist
-    :return: score file relative path
-    """
+        return stats_data_file_path
+
+    def initialize_score_file(list_name: str) -> str:
+        """
+        creates the score file and data directory if they don't exist
+        :return: score file relative path
+        """
+        score_file_relative_path = new_file_name(list_name, "scores")
+
+        prepare_file(score_file_relative_path)
+
+        return score_file_relative_path
+
     if not os.path.isdir(DATA_DIRECTORY):
         os.mkdir(DATA_DIRECTORY)
 
-    score_file_relative_path = new_file_name(list_name, "scores")
-    with open(PROOFS_DIRECTORY + list_name, "r") as f:
-        number_of_demo = len(f.readlines())
 
-    prepare_file(score_file_relative_path, str(STARTING_WEIGHT), number_of_demo)
+    proof_list_path = PROOFS_DIRECTORY + proof_list_name
+    scores_file_path = initialize_score_file(proof_list_name)
+    stats_file_path = initialize_stats_file(proof_list_name)
 
-    return score_file_relative_path
+    return proof_list_path, scores_file_path, stats_file_path
 
-
-def get_stats(list_name: str, number_of_proofs) -> (list, str):
-    """
-    :param list_name: the name of the proof file
-    :return: stats and stats file path
-    """
-    def create_stats_file(file_path):
-        with open(file_path, "w") as f:
-            f.write(" \n" * (len(proofs_and_scores)))
-
-    stats_data_file_path = new_file_name(list_name, "history")
-
-    prepare_file(stats_data_file_path, " ", number_of_proofs)
-
-    with open(stats_data_file_path, 'r') as f:
-        stats = f.read().splitlines()
-
-    stats = [list(map(int, stat.split())) for stat in stats]
-    return stats, stats_data_file_path
-
-
-def initialize_from_file(proofs_file, scores_file):
+def initialize_from_files(proofs_file, scores_file, stats_file):
     with open(proofs_file, "r", encoding="utf-8") as f:
         proofs_prompt = f.read().splitlines()
         new_proofs_and_scores = dict()
-        for proof_number, proof in enumerate(proofs_prompt, start=1):
-            new_proofs_and_scores[proof_number] = [proof]
+        for proof in proofs_prompt:
+            number, prompt = proof.split("|")
+            number = int(number)
+            new_proofs_and_scores[number] = [proof]
 
     with open(scores_file, "r") as f:
-        scores = map(float, f.read().splitlines())
-        for proof_number, score in enumerate(scores, 1):
-            new_proofs_and_scores[proof_number].append(score)
+        raw_scores = f.read().splitlines()
+        for raw_score in raw_scores:
+            number, score = raw_score.split("|")
+            score = float(score)
+            new_proofs_and_scores[number].append(score)
+
+    # add starting score if there is no score for that demo
+    for i in new_proofs_and_scores:
+        if len(new_proofs_and_scores[i]) == 1:
+            new_proofs_and_scores[i].append(1.0)
+
+    with open(stats_file, "r") as f:
+        raw_stats = f.read().splitlines()
+        for raw_stat in raw_stats:
+            number, stat = raw_stat.split("|")
+            stat = list(map(int, stat.split()))
+            new_proofs_and_scores[number].append(stat)
+
+    # add empty list if it's a new proof
+    for i in new_proofs_and_scores:
+        if len(new_proofs_and_scores) == 2:
+            new_proofs_and_scores[i].append([])
 
     return new_proofs_and_scores
 
 
 def write_file(proofs_and_scores: dict, file_path: str) -> None:
     with open(file_path, "w") as f:
-        for i in range(1, len(proofs_and_scores)):
-            f.write(str(proofs_and_scores[i][1]) + "\n")
-        f.write(str(proofs_and_scores[len(proofs_and_scores)][1]))
+        output = ""
+        for i in proofs_and_scores.keys():
+            output += str(proofs_and_scores[i][1]) + "\n"
+        output = output[:-1]
+        f.write(output)
 
 
-def write_stats(file_path: str, demo: int, score: str) -> None:
-    with open(file_path, 'r') as file:
-        data = file.readlines()
-
-    data[demo - 1] = data[demo - 1].strip() + " " + score + "\n"
-
+def write_stats(file_path: str, stats: list) -> None:
     with open(file_path, 'w') as file:
-        file.writelines(data)
+        for i in range(len(stats)):
+            line = ""
+            for j in stats[i]:
+                line += str(j+" ")
+            if i != len(stats)-1:
+                line += "\n"
+            file.write(line)
 
 
 def choose_with_weights(curent_proofs_and_scores):
@@ -225,18 +243,17 @@ if __name__ == "__main__":
     print(ASCII_ART)
 
     proof_list_name = choose_proof_list()
-    proof_list_path = PROOFS_DIRECTORY + proof_list_name
-    scores_file_path = initialize_score_file(proof_list_name)
-    mode = initialize_mode()
-    proofs_and_scores = initialize_from_file(proof_list_path, scores_file_path)
-    stats_data, stats_file_path = get_stats(proof_list_name, len(proofs_and_scores))
+    proof_list_path, scores_file_path, stats_file_path = initialize_files_path(proof_list_name)
+    proofs_and_scores = initialize_from_files(proof_list_path, scores_file_path, stats_file_path)
 
+
+    mode = initialize_mode()
     while mode == 3:
         stats_interface(proofs_and_scores)
         mode = initialize_mode()
 
     while True:
-        proofs_and_scores = initialize_from_file(proof_list_path, scores_file_path)
+        proofs_and_scores = initialize_from_files(proof_list_path, scores_file_path, stats_file_path)
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
@@ -257,6 +274,7 @@ if __name__ == "__main__":
 
         proofs_and_scores[current_proof][1] *= FACTORS_FOR_WEIGHTS_ADJUSTING[success_assessment]
         print("Nouveau poids :", proofs_and_scores[current_proof][1])
+        stats_data[current_proof-1].append(success_assessment)
 
         write_file(proofs_and_scores, scores_file_path)
-        write_stats(stats_file_path, current_proof, success_assessment)
+        write_stats(stats_file_path, stats_data)
