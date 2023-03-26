@@ -1,6 +1,6 @@
 # Proof study helper
 
-Hi ! the goal of this project is to create a tool to prompt you with proposition to proove or generaly test your knowledge and help you study.
+Hi ! the goal of this project is to create a tool to prompt you with proposition to prove or generaly test your knowledge and help you study.
 
 The main feature is the rating system used to choose the next proof better than random.
 
