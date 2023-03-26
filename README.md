@@ -15,4 +15,4 @@ The main feature is the rating system used to choose the next proof better than 
 
 # How to help
 
-Any help with the project is welcome, try to stick to the style used in the rest of the project. And don't hesitate to contact me on discord.
+Any help with the project is welcome, try to stick to the style used in the rest of the project and don't hesitate to contact me on discord.
