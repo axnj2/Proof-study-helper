@@ -1,11 +1,11 @@
-Démontre que l'ensemble des solutions à valeurs réelles de y' = ky (k compris dans R) est {y: t -> ce^(kt); c compris dans R}
-Théorème : les solutions de l'ED y' = f(x)g(y) sont définies implicitement par G(y) = F(x) + c où F est une primitive de f, G est une primitive de 1/g sur un intervalle où g ne s'annule pas et c est une constante arbitraire
-Démontre qu'une ED homogène peut se ramener à une ED à variable séparée
-Démontre comment y"=f(y) peut être ramené à une ED de degré 1
-Démontre qu'une équation différentielle linéaire y" + p(x)y' + q(x)y = 0 dont on connait une solution particuliaire y1 peut être ramenée à une équation différentielle linéaire d'ordre 1.
-La solution générale de l'EDL homogène y' = -a(x)y est y(x) = ce^(A(x))
-Si y1 est une solution particulière de y' + ay = b et y2 est une des solutions de y' + ay = 0, alors y = y1 + y2 est solution de y' + ay = b (où a,b sont compris dans R)
-y(x) = c(x)e^(-A(x)) est solution de y' = -ay si et seulement si c(x) = cste
-Démontrez la méthode de variation de constantes pour trouver la solution particulière de l'équation y' + a(x)y = b(x) [sylla section 6.5.2]
-Si lambda est compris dans C, alors pour tout n compris dans N alors la dérivée n-ieme de e^(lambda x) = lambda^n e^(lambda x)
-z(x) = c1 e^(lambda1 x) + c2 e^(lambda 2 x) est la solution générale complexe de l'EDLHcc (l'équation différentielle linéaire à coefficients constants), où c1, c2 compris dans C (constantes arbitraires) et lambda1, lambda2 sont les racines complexes du polynôme caractéristique de l'EDL
+1|Démontre que l'ensemble des solutions à valeurs réelles de y' = ky (k compris dans R) est {y: t -> ce^(kt); c compris dans R}
+2|Théorème : les solutions de l'ED y' = f(x)g(y) sont définies implicitement par G(y) = F(x) + c où F est une primitive de f, G est une primitive de 1/g sur un intervalle où g ne s'annule pas et c'est une constante arbitraire
+3|Démontre qu'une ED homogène peut se ramener à une ED à variable séparée
+4|Démontre comment y"=f(y) peut être ramené à une ED de degré 1
+5|Démontre qu'une équation différentielle linéaire y" + p(x)y' + q(x)y = 0 dont on connait une solution particuliaire y1 peut être ramenée à une équation différentielle linéaire d'ordre 1.
+6|La solution générale de l'EDL homogène y' = -a(x)y est y(x) = ce^(A(x))
+7|Si y1 est une solution particulière de y' + ay = b et y2 est une des solutions de y' + ay = 0, alors y = y1 + y2 est solution de y' + ay = b (où a,b sont compris dans R)
+8|y(x) = c(x)e^(-A(x)) est solution de y' = -ay si et seulement si c(x) = cste
+9|Démontrez la méthode de variation de constantes pour trouver la solution particulière de l'équation y' + a(x)y = b(x) [sylla section 6.5.2]
+10|Si lambda est compris dans C, alors pour tout n compris dans N alors la dérivée n-ieme de e^(lambda x) = lambda^n e^(lambda x)
+11|z(x) = c1 e^(lambda1 x) + c2 e^(lambda 2 x) est la solution générale complexe de l'EDLHcc (l'équation différentielle linéaire à coefficients constants), où c1, c2 compris dans C (constantes arbitraires) et lambda1, lambda2 sont les racines complexes du polynôme caractéristique de l'EDL
