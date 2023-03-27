@@ -1,40 +1,40 @@
-1|le nombre d'or n'est pas un rationnel
-2|racine de 2 n'est pas un rationnel
-3|Si A est borné supérieurement, alors sup A existe dans les réels
-4|inégalité triangulaire à n termes
-5|Si la limite d'une suite existe, elle est unique
-6|la suite 1 + 1/2 + 1/3 + ... + 1/n tend vers l'infini
-7|Si une suite converge dans les réels, alors elle est bornée
-8|Une suite croissante converge dans les réels si et seulement si elle est bornée supérieurement
-9|Toute suite de Cauchy est bornée
-10|Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (directe)
-11|Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (inverse)
-12|le passage à la limite préserve les inégalités
-13|critère de l'étau pour les limites de suites
-14|le produit d'une suite bornée et d'une suite qui tend vers 0 tend vers 0
-15|limite d'une somme (suites)
-16|limite d'un produit (suites)
-17|limite d'un quotient (suites)
-18|existence de la limite supérieure pour toute suite bornée
-19|f est C-Lipschitzienne sur I => f est continue sur I
-20|critère de l'étaux pour les limites de fonctions
-21|limite d'une somme (fonctions)
-22|limite d'un produit (fonctions)
-23|limite d'un quotient (fonctions)
-24|théorème des valeurs intermédiaires
-25|tout polynôme de degré impair admet au moins un zéro
-26|théorème du point fixe : f: [a, b] -> [a, b] et continue => il existe un p dans [a, b] tel que f(p)=p
-27|Dans les réels, tout compact non vide possède un minimum et un maximum (prouver l'un ou l'autre)
-28|si f est dérivable en a, alors f est continue en a
-29|dérivée d'une somme
-30|dérivée d'un produit
-31|dérivée de l'inverse
-32|dérivée de la composée
-33|dérivée de la fonction réciproque
-34|formule de Leibniz pour la dérivée d'un produit de fonctions
-35|théorème de Rolle
-36|Théorème des accroissement finis
-37|f est dérivable en a si et seulement si f est différentiable en a
-38|f est croissante sur ]a, b[ si et seulement si sa dérivée est positive sur ]a, b[ (même chose pour décroissante)
-39|on suppose c dans l'intérieur de A et f dérivable en c: si c est un extrémant local de f, alors f'(c)=0
-40|Si f est une fonction de classe C^k et que toutes les dérivées en x sauf la k-ieme sont nulles alors: si k est pair, x est un extrémant local et si k est impair (k>1), x est un point de selle
+1°le nombre d'or n'est pas un rationnel
+2°racine de 2 n'est pas un rationnel
+3°Si A est borné supérieurement, alors sup A existe dans les réels
+4°inégalité triangulaire à n termes
+5°Si la limite d'une suite existe, elle est unique
+6°la suite 1 + 1/2 + 1/3 + ... + 1/n tend vers l'infini
+7°Si une suite converge dans les réels, alors elle est bornée
+8°Une suite croissante converge dans les réels si et seulement si elle est bornée supérieurement
+9°Toute suite de Cauchy est bornée
+10°Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (directe)
+11°Une suite converge dans les réels si et seulement si elle est une suite de Cauchy (inverse)
+12°le passage à la limite préserve les inégalités
+13°critère de l'étau pour les limites de suites
+14°le produit d'une suite bornée et d'une suite qui tend vers 0 tend vers 0
+15°limite d'une somme (suites)
+16°limite d'un produit (suites)
+17°limite d'un quotient (suites)
+18°existence de la limite supérieure pour toute suite bornée
+19°f est C-Lipschitzienne sur I => f est continue sur I
+20°critère de l'étaux pour les limites de fonctions
+21°limite d'une somme (fonctions)
+22°limite d'un produit (fonctions)
+23°limite d'un quotient (fonctions)
+24°théorème des valeurs intermédiaires
+25°tout polynôme de degré impair admet au moins un zéro
+26°théorème du point fixe : f: [a, b] -> [a, b] et continue => il existe un p dans [a, b] tel que f(p)=p
+27°Dans les réels, tout compact non vide possède un minimum et un maximum (prouver l'un ou l'autre)
+28°si f est dérivable en a, alors f est continue en a
+29°dérivée d'une somme
+30°dérivée d'un produit
+31°dérivée de l'inverse
+32°dérivée de la composée
+33°dérivée de la fonction réciproque
+34°formule de Leibniz pour la dérivée d'un produit de fonctions
+35°théorème de Rolle
+36°Théorème des accroissement finis
+37°f est dérivable en a si et seulement si f est différentiable en a
+38°f est croissante sur ]a, b[ si et seulement si sa dérivée est positive sur ]a, b[ (même chose pour décroissante)
+39°on suppose c dans l'intérieur de A et f dérivable en c: si c est un extrémant local de f, alors f'(c)=0
+40°Si f est une fonction de classe C^k et que toutes les dérivées en x sauf la k-ieme sont nulles alors: si k est pair, x est un extrémant local et si k est impair (k>1), x est un point de selle

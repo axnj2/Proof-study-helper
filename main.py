@@ -85,7 +85,7 @@ def initialize_from_files(proofs_file, scores_file, stats_file):
         proofs_prompt = f.read().splitlines()
         new_proofs_and_scores = dict()
         for proof in proofs_prompt:
-            number, prompt = proof.split("|")
+            number, prompt = proof.split("°")
             number = int(number)
             new_proofs_and_scores[number] = [prompt]
 
@@ -139,7 +139,7 @@ def write_file(proofs_and_scores: dict, score_path: str, stats_path: str) -> Non
 
 def choose_with_weights(curent_proofs_and_scores):
     probability_distribution = [
-        curent_proofs_and_scores[i][1] for i in range(1, len(curent_proofs_and_scores) + 1)
+        curent_proofs_and_scores[i][1] for i in curent_proofs_and_scores.keys()
     ]
     return random.choices(list(range(1, len(curent_proofs_and_scores) + 1)), weights=probability_distribution, k=1)[0]
 

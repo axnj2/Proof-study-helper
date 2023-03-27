@@ -1,21 +1,21 @@
-1|Démontre que l'ensemble des solutions à valeurs réelles de y' = ky (k compris dans R) est {y: t -> ce^(kt); c compris dans R}
-2|Théorème : les solutions de l'ED y' = f(x)g(y) sont définies implicitement par G(y) = F(x) + c où F est une primitive de f, G est une primitive de 1/g sur un intervalle où g ne s'annule pas et c'est une constante arbitraire
-3|Démontre qu'une ED homogène peut se ramener à une ED à variable séparée
-4|Démontre comment y"=f(y) peut être ramené à une ED de degré 1
-5|Démontre qu'une équation différentielle linéaire y" + p(x)y' + q(x)y = 0 dont on connait une solution particuliaire y1 peut être ramenée à une équation différentielle linéaire d'ordre 1.
-6|La solution générale de l'EDL homogène y' = -a(x)y est y(x) = ce^(A(x))
-7|Si y1 est une solution particulière de y' + ay = b et y2 est une des solutions de y' + ay = 0, alors y = y1 + y2 est solution de y' + ay = b (où a,b sont compris dans R)
-8|y(x) = c(x)e^(-A(x)) est solution de y' = -ay si et seulement si c(x) = cste
-9|Démontrez la méthode de variation de constantes pour trouver la solution particulière de l'équation y' + a(x)y = b(x) [sylla section 6.5.2]
-10|Si lambda est compris dans C, alors pour tout n compris dans N alors la dérivée n-ieme de e^(lambda x) = lambda^n e^(lambda x)
-11|z(x) = c1 e^(lambda1 x) + c2 e^(lambda 2 x) est la solution générale complexe de l'EDLHcc (l'équation différentielle linéaire à coefficients constants), où c1, c2 compris dans C (constantes arbitraires) et lambda1, lambda2 sont les racines complexes du polynôme caractéristique de l'EDL
-52|Prouve que pour une EDLHcc avec une racine double (lambda 1 = lambda 2 = lambda) dont une des solution est y1 = e^(lambda x), y2 = xe^(lambda x) est aussi solution.
-53|Si z est solution de l'EDLH (à coeff réels) alors u := Re z et v := Im z sont solutions réelles de l'EDLH.
-54|La limite d'une fonction vectorielle peut se calculer composante par composante.
-55|Soient les fonctions vectorielles : f: R -> R^m et g : R -> R^m. Si pour tout t compris dans R, f(t) est perpendiculaire à g(t) alors <f', g> = -<f, g'>. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
-56|Soit la fonction vectorielle : f: R -> R^m. Si pour tout t compris dans R, ||f(t)||=c (c compris dans R) alors <f',f>=0. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
-57|Soit la fonction vectorielle : f: [a,b] -> R^m. Si f est continue sur [a,b] et dérivables sur ]a,b[ alors il existe un c compris dans ]a,b[ tel que ||f(b) - f(a)|| <= ||f'(c)||*|b-a|. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
-58|Soit Gamma une courbe plane, d/ds t = kappa n et d/ds n = - kappa t et donc ||d/ds t|| = ||d/ds n|| = kappa (avec des barres au dessus de t et n)
-59|Trouve la matrice des composantes de (t',n',b') dans la base (t,n,b) (démo 59 j'ai pas vraiment compris l'énoncé)
-60|Montre que les produits vectoriels du vecteur de Darboux avec les vecteurs du trièdre de frenet donnent bien leurs dérivées. (démo 60 à check que c'est bien ça)
-61|Soit (Gamma, gamma) une courbe paramétrée birégulière et de classe C^3, calcule le trièdre de Frenet, la courbure et la torsion analytiquement. (démontrer les formules pratiques)
+1°Démontre que l'ensemble des solutions à valeurs réelles de y' = ky (k compris dans R) est {y: t -> ce^(kt); c compris dans R}
+2°Théorème : les solutions de l'ED y' = f(x)g(y) sont définies implicitement par G(y) = F(x) + c où F est une primitive de f, G est une primitive de 1/g sur un intervalle où g ne s'annule pas et c'est une constante arbitraire
+3°Démontre qu'une ED homogène peut se ramener à une ED à variable séparée
+4°Démontre comment y"=f(y) peut être ramené à une ED de degré 1
+5°Démontre qu'une équation différentielle linéaire y" + p(x)y' + q(x)y = 0 dont on connait une solution particuliaire y1 peut être ramenée à une équation différentielle linéaire d'ordre 1.
+6°La solution générale de l'EDL homogène y' = -a(x)y est y(x) = ce^(A(x))
+7°Si y1 est une solution particulière de y' + ay = b et y2 est une des solutions de y' + ay = 0, alors y = y1 + y2 est solution de y' + ay = b (où a,b sont compris dans R)
+8°y(x) = c(x)e^(-A(x)) est solution de y' = -ay si et seulement si c(x) = cste
+9°Démontrez la méthode de variation de constantes pour trouver la solution particulière de l'équation y' + a(x)y = b(x) [sylla section 6.5.2]
+10°Si lambda est compris dans C, alors pour tout n compris dans N alors la dérivée n-ieme de e^(lambda x) = lambda^n e^(lambda x)
+11°z(x) = c1 e^(lambda1 x) + c2 e^(lambda 2 x) est la solution générale complexe de l'EDLHcc (l'équation différentielle linéaire à coefficients constants), où c1, c2 compris dans C (constantes arbitraires) et lambda1, lambda2 sont les racines complexes du polynôme caractéristique de l'EDL
+52°Prouve que pour une EDLHcc avec une racine double (lambda 1 = lambda 2 = lambda) dont une des solution est y1 = e^(lambda x), y2 = xe^(lambda x) est aussi solution.
+53°Si z est solution de l'EDLH (à coeff réels) alors u := Re z et v := Im z sont solutions réelles de l'EDLH.
+54°La limite d'une fonction vectorielle peut se calculer composante par composante.
+55°Soient les fonctions vectorielles : f: R -> R^m et g : R -> R^m. Si pour tout t compris dans R, f(t) est perpendiculaire à g(t) alors <f', g> = -<f, g'>. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
+56°Soit la fonction vectorielle : f: R -> R^m. Si pour tout t compris dans R, ||f(t)||=c (c compris dans R) alors <f',f>=0. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
+57°Soit la fonction vectorielle : f: [a,b] -> R^m. Si f est continue sur [a,b] et dérivables sur ]a,b[ alors il existe un c compris dans ]a,b[ tel que ||f(b) - f(a)|| <= ||f'(c)||*|b-a|. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
+58°Soit Gamma une courbe plane, d/ds t = kappa n et d/ds n = - kappa t et donc ||d/ds t|| = ||d/ds n|| = kappa (avec des barres au dessus de t et n)
+59°Trouve la matrice des composantes de (t',n',b') dans la base (t,n,b) (démo 59 j'ai pas vraiment compris l'énoncé)
+60°Montre que les produits vectoriels du vecteur de Darboux avec les vecteurs du trièdre de frenet donnent bien leurs dérivées. (démo 60 à check que c'est bien ça)
+61°Soit (Gamma, gamma) une courbe paramétrée birégulière et de classe C^3, calcule le trièdre de Frenet, la courbure et la torsion analytiquement. (démontrer les formules pratiques)
