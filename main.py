@@ -174,7 +174,7 @@ def initialize_mode():
         "Que veux tu faire ?\n"
         "   1 : Faire des démonstrations aléatoirement\n"
         "   2 : Faire des démonstrations pas encore faites\n"
-        "   3 : Voir les statistiques de ma progression\n"
+        "   3 : (ne fonctionne pas pour l'instant) Voir les statistiques de ma progression\n"
         "Input : "
     ))
     if user_input not in MODES:
