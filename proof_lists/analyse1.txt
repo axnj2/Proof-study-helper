@@ -17,7 +17,7 @@
 57°Soit la fonction vectorielle : f: [a,b] -> R^m. Si f est continue sur [a,b] et dérivables sur ]a,b[ alors il existe un c compris dans ]a,b[ tel que ||f(b) - f(a)|| <= ||f'(c)||*|b-a|. (attention il y a des barres au dessus des lettres des fonctions vectorielles)
 58°Soit Gamma une courbe plane, d/ds t = kappa n et d/ds n = - kappa t et donc ||d/ds t|| = ||d/ds n|| = kappa (avec des barres au dessus de t et n)
 59°Trouve la matrice des composantes de (t',n',b') dans la base (t,n,b) (démo 59 j'ai pas vraiment compris l'énoncé)
-60°Montre que les produits vectoriels du vecteur de Darboux avec les vecteurs du trièdre de frenet donnent bien leurs dérivées. (démo 60 à check que c'est bien ça)
+60°Montre que les produits vectoriels du vecteur de Darboux avec les vecteurs du trièdre de Frenet donnent bien leurs dérivées. (démo 60 à check que c'est bien ça)
 61°Soit (Gamma, gamma) une courbe paramétrée birégulière et de classe C^3, calcule le trièdre de Frenet, la courbure et la torsion analytiquement. (démontrer les formules pratiques)
 62°L’opération de passage à la limite est linéaire
 63°Si f est différentiable en  a⃗  alors : ∀u⃗ ∈ R la dérivée partielle de f par rapport à u⃗ en a⃗ = df(u⃗) évalué en a⃗
