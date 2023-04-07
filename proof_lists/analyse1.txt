@@ -19,7 +19,13 @@
 59°Trouve la matrice des composantes de (t',n',b') dans la base (t,n,b) (démo 59 j'ai pas vraiment compris l'énoncé)
 60°Montre que les produits vectoriels du vecteur de Darboux avec les vecteurs du trièdre de Frenet donnent bien leurs dérivées. (démo 60 à check que c'est bien ça)
 61°Soit (Gamma, gamma) une courbe paramétrée birégulière et de classe C^3, calcule le trièdre de Frenet, la courbure et la torsion analytiquement. (démontrer les formules pratiques)
+611°La fonction "ieme composante" : pi_i: R^m -> R : x⃗ -> x_i est continue
+612°La fonction "norme dans R" N: || ||: R^m -> R : x⃗ -> ||x⃗|| est continue
 62°L’opération de passage à la limite est linéaire
-63°Si f est différentiable en  a⃗  alors : ∀u⃗ ∈ R la dérivée partielle de f par rapport à u⃗ en a⃗ = df(u⃗) évalué en a⃗
+621°limite d'un produit de fonction à plusieurs variables est le produit des limites
+622°le produit scalaire de deux fonctions continues est continu
+63°Si f est différentiable en  a⃗  alors ∀u⃗ ∈ R : la dérivée partielle de f par rapport à u⃗ en a⃗ = df(u⃗) en a⃗
 64°la dérivée partielle de f par rapport à u⃗ en a⃗ = <grad f en a , u⃗ >
 65°Démontre que (f · g⃗)(a⃗ + g⃗) − (f · g⃗)(a⃗) = df (a⃗)g⃗(a⃗) + f (a⃗)dg⃗(a⃗))v⃗ + o(||v⃗||)
+66°équation des ondes : démontre que u(x,t) = f(x-ct) + g(x+ct) satisfait l'équation des ondes (dérivée partielle^2 de u par rapport à t = c^2 * dérivée partielle^2 de u par rapport à x) [avec f,g deux fonctions de classe C^2]
+67°si f⃗ a une réciproque f⃗-1 alors la matrice jacobienne de f⃗-1 en a⃗ est la matrice inverse de la matrice jacobienne de f⃗ en a⃗
