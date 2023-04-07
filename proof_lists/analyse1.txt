@@ -23,7 +23,7 @@
 612°La fonction "norme dans R" N: || ||: R^m -> R : x⃗ -> ||x⃗|| est continue
 62°L’opération de passage à la limite est linéaire
 621°limite d'un produit de fonction à plusieurs variables est le produit des limites
-622°le produit scalaire de deux fonctions continues est continu
+622°la limite du produit scalaire est égal au produit scalaire des limites
 63°Si f est différentiable en  a⃗  alors ∀u⃗ ∈ R : la dérivée partielle de f par rapport à u⃗ en a⃗ = df(u⃗) en a⃗
 64°la dérivée partielle de f par rapport à u⃗ en a⃗ = <grad f en a , u⃗ >
 65°Démontre que (f · g⃗)(a⃗ + g⃗) − (f · g⃗)(a⃗) = df (a⃗)g⃗(a⃗) + f (a⃗)dg⃗(a⃗))v⃗ + o(||v⃗||)
