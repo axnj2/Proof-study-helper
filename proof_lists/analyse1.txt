@@ -29,3 +29,4 @@
 65°Démontre que (f · g⃗)(a⃗ + g⃗) − (f · g⃗)(a⃗) = df (a⃗)g⃗(a⃗) + f (a⃗)dg⃗(a⃗))v⃗ + o(||v⃗||)
 66°équation des ondes : démontre que u(x,t) = f(x-ct) + g(x+ct) satisfait l'équation des ondes (dérivée partielle^2 de u par rapport à t = c^2 * dérivée partielle^2 de u par rapport à x) [avec f,g deux fonctions de classe C^2]
 67°si f⃗ a une réciproque f⃗-1 alors la matrice jacobienne de f⃗-1 en a⃗ est la matrice inverse de la matrice jacobienne de f⃗ en a⃗
+80°Soit f: A de R^n dans R différentiable en vec(a) dans intA. Si vec(a) est un extrémant local de f, alors df( vec(a))=0.
