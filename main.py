@@ -1,6 +1,7 @@
 import random
 import os
 from statistics import mean
+
 try:
     from PIL import Image
 except:
@@ -80,12 +81,12 @@ def initialize_files_path(proof_list_name):
     if not os.path.isdir(DATA_DIRECTORY):
         os.mkdir(DATA_DIRECTORY)
 
-
     proof_list_path = PROOFS_DIRECTORY + proof_list_name
     scores_file_path = initialize_score_file(proof_list_name)
     stats_file_path = initialize_stats_file(proof_list_name)
 
     return proof_list_path, scores_file_path, stats_file_path
+
 
 def initialize_from_files(proofs_file, scores_file, stats_file):
     with open(proofs_file, "r", encoding="utf-8") as f:
@@ -170,7 +171,7 @@ def choose_next_proof(current_mode, curent_proofs_and_scores):
             current_mode = 1
         else:
             print(f"il reste {number_of_new} démonstration(s) pas encore faites")
-    if MODES[current_mode] == "random":
+    elif MODES[current_mode] == "random":
         next_proof = choose_with_weights(curent_proofs_and_scores)
 
     return next_proof, current_mode
@@ -189,25 +190,25 @@ def initialize_mode():
     return user_input
 
 
-def stats_interface(proofs_and_scores): # currently broken
+def stats_interface(proofs_and_scores):  # currently broken
     def precise_stats(maxs, moyennes):
         for proof_number in range(len(proofs_and_scores)):
             render_proof(proof_number + 1, proofs_and_scores, False)
             if moyennes[proof_number] != -1:
-                print(f"Elle a une moyenne de {moyennes[proof_number]*20}/{20}")
+                print(f"Elle a une moyenne de {moyennes[proof_number] * 20}/{20}")
                 print(f"Elle a un max de {maxs[proof_number]}")
                 print(f"Elle a été faite {len(proofs_and_scores[proof_number][2])} fois")
                 print(f"Les notes sont {proofs_and_scores[proof_number][2]}")
-                print(f"poids actuel : {proofs_and_scores[proof_number+1][1]}")
+                print(f"poids actuel : {proofs_and_scores[proof_number + 1][1]}")
             else:
                 print("Pas encore faite")
 
     def get_normalised_success_score(choice):
-        min_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING["0"]
-        max_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING["3"]
-        current_value = 1/FACTORS_FOR_WEIGHTS_ADJUSTING[str(choice)]
+        min_value = 1 / FACTORS_FOR_WEIGHTS_ADJUSTING["0"]
+        max_value = 1 / FACTORS_FOR_WEIGHTS_ADJUSTING["3"]
+        current_value = 1 / FACTORS_FOR_WEIGHTS_ADJUSTING[str(choice)]
         # min max scaling
-        normalized_value = (current_value - min_value) / (max_value-min_value)
+        normalized_value = (current_value - min_value) / (max_value - min_value)
         return normalized_value
 
     averages = []
@@ -231,12 +232,12 @@ def stats_interface(proofs_and_scores): # currently broken
     print("\n-----------------------------------------------\n\n")
     print(f"Tu as fait {len([m for m in averages if m != -1])} démonstrations sur {len(proofs_and_scores)}")
     print(f"Ta moyenne est de "
-          f" {round((sum(averages_excluding_not_done_yet) / len(averages_excluding_not_done_yet))*20, 2)}/20"
+          f" {round((sum(averages_excluding_not_done_yet) / len(averages_excluding_not_done_yet)) * 20, 2)}/20"
           f"sur celles que tu as déjà faites")
 
-    total_score = sum(averages_excluding_not_done_yet)/ len(averages)
+    total_score = sum(averages_excluding_not_done_yet) / len(averages)
 
-    print(f"Ton score total est de {round(total_score*20, 2)}/20\n")
+    print(f"Ton score total est de {round(total_score * 20, 2)}/20\n")
 
     continue_status = int(input(
         "Que veux tu faire ? \n"
@@ -247,13 +248,14 @@ def stats_interface(proofs_and_scores): # currently broken
     if continue_status == 0:
         precise_stats(maxs, averages)
 
-def render_proof(current_proof, proofs_and_scores, open = True):
-    if(proofs_and_scores[current_proof][0] == "Image"):
+
+def render_proof(current_proof, proofs_and_scores, open=True):
+    if (proofs_and_scores[current_proof][0] == "Image"):
         url1 = "./images/" + str(current_proof) + ".jpg"
         url2 = "./images/" + str(current_proof) + "_.jpg"
-        im1 = Image.open(r"./images/" + str(current_proof) + ".jpg") 
+        im1 = Image.open(r"./images/" + str(current_proof) + ".jpg")
         im2 = Image.open(r"./images/" + str(current_proof) + "_.jpg")
-        if(open == True):
+        if (open == True):
             print(f"\n\033[91m\033[1mDemonstration {current_proof}\033[0m: {os.path.abspath(url1)}")
             im1.show()
             input('Appuie sur entrée pour voir la réponse')
@@ -271,7 +273,6 @@ if __name__ == "__main__":
     proof_list_name = choose_proof_list()
     proof_list_path, scores_file_path, stats_file_path = initialize_files_path(proof_list_name)
     proofs_and_scores = initialize_from_files(proof_list_path, scores_file_path, stats_file_path)
-
 
     mode = initialize_mode()
     while mode == 3:
