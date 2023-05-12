@@ -1,7 +1,14 @@
 import random
 import os
 from statistics import mean
-
+try:
+    from PIL import Image
+except:
+    print("Il faut installer la bibliothèque pillow pour pouvoir utiliser le script avec les images.\n"
+          "Essaye les commandes suivantes :\n"
+          "python3 -m pip install --upgrade pip\n"
+          "python3 -m pip install --upgrade Pillow\n")
+    exit()
 
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
@@ -48,7 +55,7 @@ def initialize_files_path(proof_list_name):
     def new_file_name(proofs_file_name, data_name):
         return DATA_DIRECTORY + proofs_file_name[:-4] + "_" + data_name + ".txt"
 
-    def initialize_stats_file(list_name: str) -> (list, str):
+    def initialize_stats_file(list_name: str):
         """
         :param list_name: the name of the proof file
         :return: stats and stats file path
@@ -184,13 +191,13 @@ def initialize_mode():
 
 def stats_interface(proofs_and_scores): # currently broken
     def precise_stats(maxs, moyennes):
-        for proof_number in range(len(stats_data)):
-            print(f"\n\033[91m\033[1m" + proofs_and_scores[proof_number + 1][0] + "\033[0m")
+        for proof_number in range(len(proofs_and_scores)):
+            render_proof(proof_number + 1, proofs_and_scores, False)
             if moyennes[proof_number] != -1:
                 print(f"Elle a une moyenne de {moyennes[proof_number]*20}/{20}")
                 print(f"Elle a un max de {maxs[proof_number]}")
-                print(f"Elle a été faite {len(stats_data[proof_number])} fois")
-                print(f"Les notes sont {stats_data[proof_number]}")
+                print(f"Elle a été faite {len(proofs_and_scores[proof_number][2])} fois")
+                print(f"Les notes sont {proofs_and_scores[proof_number][2]}")
                 print(f"poids actuel : {proofs_and_scores[proof_number+1][1]}")
             else:
                 print("Pas encore faite")
@@ -206,7 +213,8 @@ def stats_interface(proofs_and_scores): # currently broken
     averages = []
     maxs = []
     averages_excluding_not_done_yet = []
-    for proof_result_history in stats_data:
+    for proof in proofs_and_scores:
+        proof_result_history = proofs_and_scores[proof][2]
         success_scores = list(map(get_normalised_success_score, proof_result_history))
         if len(success_scores) != 0:
             maxs.append(max(success_scores))
@@ -223,7 +231,7 @@ def stats_interface(proofs_and_scores): # currently broken
     print("\n-----------------------------------------------\n\n")
     print(f"Tu as fait {len([m for m in averages if m != -1])} démonstrations sur {len(proofs_and_scores)}")
     print(f"Ta moyenne est de "
-          f"{round((sum(averages_excluding_not_done_yet) / len(averages_excluding_not_done_yet))*20, 2)}/20"
+          f" {round((sum(averages_excluding_not_done_yet) / len(averages_excluding_not_done_yet))*20, 2)}/20"
           f"sur celles que tu as déjà faites")
 
     total_score = sum(averages_excluding_not_done_yet)/ len(averages)
@@ -238,6 +246,23 @@ def stats_interface(proofs_and_scores): # currently broken
     ))
     if continue_status == 0:
         precise_stats(maxs, averages)
+
+def render_proof(current_proof, proofs_and_scores, open = True):
+    if(proofs_and_scores[current_proof][0] == "Image"):
+        url1 = "./images/" + str(current_proof) + ".jpg"
+        url2 = "./images/" + str(current_proof) + "_.jpg"
+        im1 = Image.open(r"./images/" + str(current_proof) + ".jpg") 
+        im2 = Image.open(r"./images/" + str(current_proof) + "_.jpg")
+        if(open == True):
+            print(f"\n\033[91m\033[1mDemonstration {current_proof}\033[0m: {os.path.abspath(url1)}")
+            im1.show()
+            input('Appuie sur entrée pour voir la réponse')
+            im2.show()
+        else:
+            print(f"\n\033[91m\033[1mDemonstration {current_proof}\033[0m: {os.path.abspath(url1)}")
+            print(f"Réponse: {os.path.abspath(url2)}")
+    else:
+        print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
 
 
 if __name__ == "__main__":
@@ -258,7 +283,7 @@ if __name__ == "__main__":
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
-        print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
+        render_proof(current_proof, proofs_and_scores)
         success_assessment = input(
             "Démo réussie ? \n"
             "   0 : Pas du tout\n"
