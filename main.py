@@ -1,7 +1,14 @@
 import random
 import os
 from statistics import mean
-from PIL import Image
+try:
+    from PIL import Image
+except:
+    print("Il faut installer la bibliothèque pillow pour pouvoir utiliser le script avec les images.\n"
+          "Essaye les commandes suivantes :\n"
+          "python3 -m pip install --upgrade pip\n"
+          "python3 -m pip install --upgrade Pillow\n")
+    exit()
 
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
