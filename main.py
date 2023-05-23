@@ -4,18 +4,34 @@ from statistics import mean
 
 try:
     from PIL import Image
-except:
+except :
     print("Il faut installer la bibliothèque pillow pour pouvoir utiliser le script avec les images.\n"
           "Essaye les commandes suivantes :\n"
           "python3 -m pip install --upgrade pip\n"
           "python3 -m pip install --upgrade Pillow\n")
     exit()
 
+try:
+    import matplotlib as plt
+except:
+    print("Il faut installer la bibliothèque pillow pour pouvoir afficher les énoncés en LATEX.\n"
+          "Essaye les commandes suivantes :\n"
+          "python3 -m pip install --upgrade pip\n"
+          "python3 -m pip install --upgrade matplotlib\n")
+    exit()
+
+
+# Constants for the algorithms choosing the next proof
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
 PROOFS_DIRECTORY = "proof_lists/"
 DATA_DIRECTORY = "data/"
 STARTING_WEIGHT = 1.0
+
+# constants for matplotlib LATEX display
+FONT_SIZE = 12
+FONT_COLOR = "black"
+
 ASCII_ART = r"""
  ____                          ___      ____    __                __              __  __          ___                            
 /\  _`\                      /'___\    /\  _`\ /\ \__            /\ \            /\ \/\ \        /\_ \                           
@@ -249,8 +265,17 @@ def stats_interface(proofs_and_scores):  # currently broken
         precise_stats(maxs, averages)
 
 
+def display_math(latex_code):
+    plt.figure(figsize=(12, 2))
+    ax = plt.subplot()
+    plt.subplots_adjust(left=0)
+    ax.axis('off')
+    ax.text(0, 0, latex_code, fontsize=FONT_SIZE, color=FONT_COLOR)
+    plt.show()
+
+
 def render_proof(current_proof, proofs_and_scores, open=True):
-    if (proofs_and_scores[current_proof][0] == "Image"):
+    if proofs_and_scores[current_proof][0] == "Image":
         url1 = "./images/" + str(current_proof) + ".jpg"
         url2 = "./images/" + str(current_proof) + "_.jpg"
         im1 = Image.open(r"./images/" + str(current_proof) + ".jpg")
