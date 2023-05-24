@@ -23,16 +23,17 @@ PROOF_FILE_NAME = "proof_lists/analyse1.txt"
 def load_file(proof_file_name) -> dict:
     proofs_and_scores = dict()  # key: proof number, value: [proof text, score, stats, is_latex, has_answer_image]
 
-    with open(proof_file_name, 'r') as f:
+    with open(proof_file_name, 'r', encoding="utf-8") as f:
         number_of_proofs = int(f.readline())
         for i in range(number_of_proofs):
             header = f.readline().split()
-            number_of_lines_in_proof, proof_number, is_latex, has_answer_image = int(header[0]), int(header[1]), bool(
-                header[2]), bool(header[3])
+            number_of_lines_in_proof, proof_number, is_latex, has_answer_image = int(header[0]), int(header[1]), str2bool(
+                header[2]), str2bool(header[3])
             proof_text = r""
             for j in range(number_of_lines_in_proof):
                 proof_text += f.readline()
-            proof_text = proof_text.strip()
+            proof_text = proof_text.strip("\n")
+            print(proof_text)
             proofs_and_scores[proof_number] = [proof_text, None, None, is_latex, has_answer_image]
 
     return proofs_and_scores
@@ -58,7 +59,7 @@ def ask_for_new_proof_question():
     while new_proof_line != "e\n":
         proof_text += new_proof_line
         new_proof_line = input() + "\n"
-    proof_text = proof_text.strip().encode(encoding="utf-8").decode(encoding="utf-8") # fix encoding issues (ikd why)
+    proof_text = proof_text.strip()
     # input metadata
     has_image = str2bool(input("Does your proof have an image? (y/n): "))
     is_latex = str2bool(input("Is your proof in latex? (y/n): "))
