@@ -17,7 +17,7 @@ If the user wants to add a proof that has already been added, the user should
 delete the proof from the proof list file first.
 """
 
-PROOF_FILE_NAME = # complete with path to proof file
+PROOF_FILE_NAME = "proof_lists/analyse1.txt"
 
 
 def load_file(proof_file_name) -> dict:
@@ -39,7 +39,7 @@ def load_file(proof_file_name) -> dict:
 
 
 def write_to_proof_file(proof_file_name: str, data: dict):
-    with open(proof_file_name, 'w') as f:
+    with open(proof_file_name, 'w', encoding="utf-8") as f:
         f.write(f"{len(data)}\n")
         for proof_number in data.keys():
             proof_text, score, stats, is_latex, has_answer_image = data[proof_number]
@@ -58,7 +58,7 @@ def ask_for_new_proof_question():
     while new_proof_line != "e\n":
         proof_text += new_proof_line
         new_proof_line = input() + "\n"
-    proof_text = proof_text.strip()
+    proof_text = proof_text.strip().encode(encoding="utf-8").decode(encoding="utf-8") # fix encoding issues (ikd why)
     # input metadata
     has_image = str2bool(input("Does your proof have an image? (y/n): "))
     is_latex = str2bool(input("Is your proof in latex? (y/n): "))
