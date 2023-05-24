@@ -1,3 +1,22 @@
+"""
+This script is used to add new proofs to the proof list file. The format of the file is as follows:
+    <number of proofs>
+    <number of lines in proof> <proof number> <is latex> <has image>
+    <proof text>
+    ...
+    <number of lines in proof> <proof number> <is latex> <has image>
+    <proof text>
+    ...
+    ...
+
+The script will first load the file into a dictionary, and then ask the user for a new proof. The user will input the
+proof text, and the metadata (proof number, whether the proof is in latex, whether the proof has an image). The script
+will then add the new proof to the dictionary, and write the dictionary back to the file.
+
+If the user wants to add a proof that has already been added, the user should
+delete the proof from the proof list file first.
+"""
+
 PROOF_FILE_NAME = # complete with path to proof file
 
 
