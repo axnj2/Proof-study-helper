@@ -33,7 +33,6 @@ def load_file(proof_file_name) -> dict:
             for j in range(number_of_lines_in_proof):
                 proof_text += f.readline()
             proof_text = proof_text.strip("\n")
-            print(proof_text)
             proofs_and_scores[proof_number] = [proof_text, None, None, is_latex, has_answer_image]
 
     return proofs_and_scores
