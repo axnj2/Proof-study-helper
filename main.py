@@ -13,7 +13,7 @@ except :
     exit()
 
 try:
-    import matplotlib as plt
+    import matplotlib.pyplot as plt
 except:
     print("Il faut installer la bibliothèque pillow pour pouvoir afficher les énoncés en LATEX.\n"
           "Essaye les commandes suivantes :\n"
@@ -104,8 +104,9 @@ def initialize_files_path(proof_list_name):
     proof_list_path = PROOFS_DIRECTORY + proof_list_name
     scores_file_path = initialize_score_file(proof_list_name)
     stats_file_path = initialize_stats_file(proof_list_name)
+    images_directory_path = IMAGE_DIRECTORY + proof_list_name[:-4] + "/"
 
-    return proof_list_path, scores_file_path, stats_file_path
+    return proof_list_path, scores_file_path, stats_file_path, images_directory_path
 
 
 def initialize_from_files(proofs_file, scores_file, stats_file):
@@ -301,20 +302,23 @@ def display_math(latex_code):
     plt.show()
 
 
-def render_proof(current_proof, proofs_and_scores, open=True):
-    if proofs_and_scores[current_proof][0] == "Image":
-        url1 = "./images/" + str(current_proof) + ".jpg"
-        url2 = "./images/" + str(current_proof) + "_.jpg"
-        im1 = Image.open(r"./images/" + str(current_proof) + ".jpg")
-        im2 = Image.open(r"./images/" + str(current_proof) + "_.jpg")
-        if (open == True):
-            print(f"\n\033[91m\033[1mDemonstration {current_proof}\033[0m: {os.path.abspath(url1)}")
-            im1.show()
-            input('Appuie sur entrée pour voir la réponse')
-            im2.show()
+def render_proof(current_proof, proofs_and_scores, image_directory, open=True):
+    if proofs_and_scores[current_proof][4] == True: # has_image = True
+        solution_image_path = image_directory + str(current_proof) + ".png"
+        solution_image = PIL.Image.open(solution_image_path)
+
+        # show the prompt
+        if proofs_and_scores[current_proof][3] == True: # has_latex = True
+            display_math(proofs_and_scores[current_proof][0])
         else:
-            print(f"\n\033[91m\033[1mDemonstration {current_proof}\033[0m: {os.path.abspath(url1)}")
-            print(f"Réponse: {os.path.abspath(url2)}")
+            print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
+
+        # show the solution
+        if (open == True):
+            solution_image.show()
+        else:
+            print(f"Réponse: {os.path.abspath(solution_image_path)}")
+
     else:
         print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
 
@@ -323,7 +327,7 @@ if __name__ == "__main__":
     print(ASCII_ART)
 
     proof_list_name = choose_proof_list()
-    proof_list_path, scores_file_path, stats_file_path = initialize_files_path(proof_list_name)
+    proof_list_path, scores_file_path, stats_file_path, images_directory_path = initialize_files_path(proof_list_name)
     proofs_and_scores = initialize_from_files(proof_list_path, scores_file_path, stats_file_path)
 
     mode = initialize_mode()
@@ -336,7 +340,7 @@ if __name__ == "__main__":
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
 
-        render_proof(current_proof, proofs_and_scores)
+        render_proof(current_proof, proofs_and_scores, images_directory_path)
         success_assessment = input(
             "Démo réussie ? \n"
             "   0 : Pas du tout\n"
