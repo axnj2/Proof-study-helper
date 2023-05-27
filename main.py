@@ -1,9 +1,10 @@
 import random
 import os
 from statistics import mean
+from add_new_proof_to_list import load_file
 
 try:
-    from PIL import Image
+    import PIL
 except :
     print("Il faut installer la bibliothèque pillow pour pouvoir utiliser le script avec les images.\n"
           "Essaye les commandes suivantes :\n"
@@ -24,9 +25,12 @@ except:
 # Constants for the algorithms choosing the next proof
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
 MODES = {1: "random", 2: "new", 3: "stats"}
+STARTING_WEIGHT = 1.0
+
+# directories
 PROOFS_DIRECTORY = "proof_lists/"
 DATA_DIRECTORY = "data/"
-STARTING_WEIGHT = 1.0
+IMAGE_DIRECTORY = "images/"
 
 # constants for matplotlib LATEX display
 FONT_SIZE = 12
@@ -105,54 +109,76 @@ def initialize_files_path(proof_list_name):
 
 
 def initialize_from_files(proofs_file, scores_file, stats_file):
-    with open(proofs_file, "r", encoding="utf-8") as f:
-        proofs_prompt = f.read().splitlines()
-        new_proofs_and_scores = dict()
-        for proof in proofs_prompt:
-            number, prompt = proof.split("°")
-            number = int(number)
-            new_proofs_and_scores[number] = [prompt]
+    """
+    Proof and scores dict format :
+    key: proof number, value: [proof text, score, stats, is_latex, has_answer_image]
 
-    with open(scores_file, "r") as f:
+    :param proofs_file: path to the file containing the proofs
+    :param scores_file: path to the file containing the scores
+    :param stats_file: path to the file containing the stats
+    :return: proofs_and_scores dictionary
+    """
+
+    # check if the file is in the new encoding or the legacy one
+    proofs_file_format = "legacy"
+    with open(proofs_file, "r", encoding="utf-8") as f:
+        first_line = f.readline()
+        if first_line.strip().isnumeric():
+            proofs_file_format = "new"
+
+    if proofs_file_format == "legacy":
+        with open(proofs_file, "r", encoding="utf-8") as f:
+            proofs_prompt = f.read().splitlines()
+            new_proofs_and_scores = dict()
+            for proof in proofs_prompt:
+                number, prompt = proof.split("°")
+                number = int(number)
+                new_proofs_and_scores[number] = [prompt, None, None, None, None]
+
+    elif proofs_file_format == "new":
+        new_proofs_and_scores = load_file(proofs_file)
+
+    with open(scores_file, "r", encoding="utf-8") as f:
         raw_scores = f.read().splitlines()
         for raw_score in raw_scores:
             number, score = raw_score.split("|")
             number = int(number)
             score = float(score)
-            new_proofs_and_scores[number].append(score)
+            new_proofs_and_scores[number][1] = score
 
     # add starting score if there is no score for that demo
     for i in new_proofs_and_scores:
-        if len(new_proofs_and_scores[i]) == 1:
-            new_proofs_and_scores[i].append(1.0)
+        if new_proofs_and_scores[i][1] is None:
+            new_proofs_and_scores[i][1] = 1.0
 
-    with open(stats_file, "r") as f:
+    with open(stats_file, "r", encoding="utf-8") as f:
         raw_stats = f.read().splitlines()
         for raw_stat in raw_stats:
             number, stat = raw_stat.split("|")
             number = int(number)
             stat = list(map(int, stat.split()))
-            new_proofs_and_scores[number].append(stat)
+            new_proofs_and_scores[number][2] = stat
 
     # add empty list if it's a new proof
     for i in new_proofs_and_scores:
-        if len(new_proofs_and_scores[i]) == 2:
-            new_proofs_and_scores[i].append([])
+        if new_proofs_and_scores[i][2] is None:
+            new_proofs_and_scores[i][2] = []
 
     return new_proofs_and_scores
 
 
 def write_file(proofs_and_scores: dict, score_path: str, stats_path: str) -> None:
+    sorted_proof_numbers = sorted(list(proofs_and_scores.keys()))
     with open(score_path, "w") as f:
         output = ""
-        for i in proofs_and_scores.keys():
+        for i in sorted_proof_numbers:
             output += str(i) + "|" + str(proofs_and_scores[i][1]) + "\n"
         output = output[:-1]
         f.write(output)
 
     with open(stats_path, "w") as f:
         output = ""
-        for i in proofs_and_scores.keys():
+        for i in sorted_proof_numbers:
             output += str(i) + "|"
             for result in proofs_and_scores[i][2]:
                 output += str(result) + " "
@@ -162,10 +188,11 @@ def write_file(proofs_and_scores: dict, score_path: str, stats_path: str) -> Non
 
 
 def choose_with_weights(curent_proofs_and_scores):
+    sorted_proof_numbers = sorted(list(curent_proofs_and_scores.keys()))
     probability_distribution = [
-        curent_proofs_and_scores[i][1] for i in curent_proofs_and_scores.keys()
+        curent_proofs_and_scores[i][1] for i in sorted_proof_numbers
     ]
-    return random.choices(list(range(1, len(curent_proofs_and_scores) + 1)), weights=probability_distribution, k=1)[0]
+    return random.choices(sorted_proof_numbers, weights=probability_distribution, k=1)[0]
 
 
 def choose_only_new(curent_proofs_and_scores):
