@@ -5,7 +5,7 @@ from add_new_proof_to_list import load_file
 
 try:
     import PIL
-except :
+except:
     print("Il faut installer la bibliothèque pillow pour pouvoir utiliser le script avec les images.\n"
           "Essaye les commandes suivantes :\n"
           "python3 -m pip install --upgrade pip\n"
@@ -15,12 +15,11 @@ except :
 try:
     import matplotlib.pyplot as plt
 except:
-    print("Il faut installer la bibliothèque pillow pour pouvoir afficher les énoncés en LATEX.\n"
+    print("Il faut installer la bibliothèque matplotlib pour pouvoir afficher les énoncés en LATEX.\n"
           "Essaye les commandes suivantes :\n"
           "python3 -m pip install --upgrade pip\n"
           "python3 -m pip install --upgrade matplotlib\n")
     exit()
-
 
 # Constants for the algorithms choosing the next proof
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
@@ -36,6 +35,7 @@ IMAGE_DIRECTORY = "images/"
 FONT_SIZE = 12
 FONT_COLOR = "black"
 
+# noinspection PyPep8
 ASCII_ART = r"""
  ____                          ___      ____    __                __              __  __          ___                            
 /\  _`\                      /'___\    /\  _`\ /\ \__            /\ \            /\ \/\ \        /\_ \                           
@@ -65,6 +65,7 @@ def choose_proof_list():
 
 
 def initialize_files_path(proof_list_name):
+    # noinspection PyUnusedLocal
     def prepare_file(path: str) -> None:
         try:
             with open(path, "r") as f:
@@ -234,6 +235,7 @@ def initialize_mode():
     return user_input
 
 
+# noinspection SpellCheckingInspection
 def stats_interface(proofs_and_scores):  # currently broken
     def precise_stats(maxs, moyennes):
         for proof_number in range(len(proofs_and_scores)):
@@ -302,19 +304,22 @@ def display_math(latex_code):
     plt.show()
 
 
-def render_proof(current_proof, proofs_and_scores, image_directory, open=True):
-    if proofs_and_scores[current_proof][4] == True: # has_image = True
+# noinspection PyPep8
+def render_proof(current_proof, proofs_and_scores, image_directory, display_image=True):
+    # noinspection PySimplifyBooleanCheck
+    if proofs_and_scores[current_proof][4] == True:  # has_image = True
         solution_image_path = image_directory + str(current_proof) + ".png"
         solution_image = PIL.Image.open(solution_image_path)
 
         # show the prompt
-        if proofs_and_scores[current_proof][3] == True: # has_latex = True
-            display_math(proofs_and_scores[current_proof][0])
-        else:
-            print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
+        display_math(proofs_and_scores[current_proof][0])
+        # if proofs_and_scores[current_proof][3] == True: # has_latex = True
+        #     display_math(proofs_and_scores[current_proof][0])
+        # else:
+        #     print("\n\033[91m\033[1m" + proofs_and_scores[current_proof][0] + "\033[0m")
 
         # show the solution
-        if (open == True):
+        if display_image:
             solution_image.show()
         else:
             print(f"Réponse: {os.path.abspath(solution_image_path)}")
