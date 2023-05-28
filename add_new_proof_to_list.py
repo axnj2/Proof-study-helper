@@ -16,6 +16,8 @@ will then add the new proof to the dictionary, and write the dictionary back to 
 If the user wants to add a proof that has already been added, the user should
 delete the proof from the proof list file first.
 """
+import main
+
 
 PROOF_FILE_NAME = "proof_lists/analyse1.txt"
 
@@ -41,7 +43,7 @@ def load_file(proof_file_name) -> dict:
 def write_to_proof_file(proof_file_name: str, data: dict):
     with open(proof_file_name, 'w', encoding="utf-8") as f:
         f.write(f"{len(data)}\n")
-        for proof_number in data.keys():
+        for proof_number in sorted(data.keys()):
             proof_text, score, stats, is_latex, has_answer_image = data[proof_number]
             f.write(f"{len(proof_text.splitlines())} {proof_number} {is_latex} {has_answer_image}\n")
             f.write(proof_text + "\n")
@@ -51,7 +53,7 @@ def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1", "y")
 
 
-def ask_for_new_proof_question():
+def ask_for_proof_text():
     # input raw string
     proof_text = ""
     new_proof_line = input("Enter your new proof question (return a single \"e\" to finish): \n") + "\n"
@@ -59,6 +61,12 @@ def ask_for_new_proof_question():
         proof_text += new_proof_line
         new_proof_line = input() + "\n"
     proof_text = proof_text.strip()
+    return proof_text
+
+
+def ask_for_new_proof_question():
+    proof_text = ask_for_proof_text()
+
     # input metadata
     has_image = str2bool(input("Does your proof have an image? (y/n): "))
     is_latex = str2bool(input("Is your proof in latex? (y/n): "))
@@ -75,6 +83,14 @@ if __name__ == "__main__":
     while working:
         proofs_and_scores = load_file(PROOF_FILE_NAME)
         proof_number, new_proof = ask_for_new_proof_question()
+
+        keep_proof = False
+        while not keep_proof:
+            main.display_math(new_proof[0])
+            keep_proof = str2bool(input("Do you want to keep this proof? (y/n): "))
+            if not keep_proof:
+                new_proof[0] = ask_for_proof_text()
+
         proofs_and_scores[proof_number] = new_proof
         write_to_proof_file(PROOF_FILE_NAME, proofs_and_scores)
 
