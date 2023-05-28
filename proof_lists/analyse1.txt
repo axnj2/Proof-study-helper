@@ -1,11 +1,11 @@
-12
+13
+1 41 True True
+Démontre que l'ensemble des solutions (à valeurs réelles) de $y^{\prime}=k y$ est $\left\{y: t \mapsto c e^{k t} ; c \in \mathbb{R}\right\}$
 4 42 True True
 Démontre le théorème suivant :
    Soit $F$ une primitive de $f$, soit $G$ est une primitive de $\frac{1}{g}$ sur un intervalle où $g$ ne s'annule pas,
    alors les solutions de l'ED $y^{\prime}=f(x) g(y)$ sont définies implicitement par $G(y)=F(x)+c$
    où $c$ est une constante arbitraire.
-1 41 True True
-Démontre que l'ensemble des solutions (à valeurs réelles) de $y^{\prime}=k y$ est $\left\{y: t \mapsto c e^{k t} ; c \in \mathbb{R}\right\}$
 1 43 False True
 Montre qu'une équation différentielle homogène (ED) peut être ramenée à une ED variable séparées
 1 44 True True
