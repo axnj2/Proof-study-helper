@@ -1,7 +1,7 @@
 import random
 import os
 from statistics import mean
-from add_new_proof_to_list import load_file
+#from add_new_proof_to_list import load_file
 
 try:
     import PIL
@@ -34,6 +34,7 @@ IMAGE_DIRECTORY = "images/"
 # constants for matplotlib LATEX display
 FONT_SIZE = 12
 FONT_COLOR = "black"
+DISPLAY_SHAPE = (12, 2) # a rectangle, width, height in inches
 
 # noinspection PyPep8
 ASCII_ART = r"""
@@ -108,6 +109,23 @@ def initialize_files_path(proof_list_name):
     images_directory_path = IMAGE_DIRECTORY + proof_list_name[:-4] + "/"
 
     return proof_list_path, scores_file_path, stats_file_path, images_directory_path
+
+def load_file(proof_file_name) -> dict:
+    proofs_and_scores = dict()  # key: proof number, value: [proof text, score, stats, is_latex, has_answer_image]
+
+    with open(proof_file_name, 'r', encoding="utf-8") as f:
+        number_of_proofs = int(f.readline())
+        for i in range(number_of_proofs):
+            header = f.readline().split()
+            number_of_lines_in_proof, proof_number, is_latex, has_answer_image = int(header[0]), int(header[1]), str2bool(
+                header[2]), str2bool(header[3])
+            proof_text = r""
+            for j in range(number_of_lines_in_proof):
+                proof_text += f.readline()
+            proof_text = proof_text.strip("\n")
+            proofs_and_scores[proof_number] = [proof_text, None, None, is_latex, has_answer_image]
+
+    return proofs_and_scores
 
 
 def initialize_from_files(proofs_file, scores_file, stats_file):
@@ -296,7 +314,7 @@ def stats_interface(proofs_and_scores):  # currently broken
 
 
 def display_math(latex_code):
-    plt.figure(figsize=(12, 2))
+    plt.figure(figsize=DISPLAY_SHAPE)
     ax = plt.subplot()
     plt.subplots_adjust(left=0)
     ax.axis('off')
