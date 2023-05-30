@@ -1,4 +1,4 @@
-13
+12
 1 41 True True
 Démontre que l'ensemble des solutions (à valeurs réelles) de $y^{\prime}=k y$ est $\left\{y: t \mapsto c e^{k t} ; c \in \mathbb{R}\right\}$
 4 42 True True
