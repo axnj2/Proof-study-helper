@@ -68,6 +68,10 @@ ASCII_ART = r"""
 """
 
 
+def str2bool(v):
+    return v.lower() in ("yes", "true", "t", "1", "y")
+
+
 def choose_proof_list():
     def discover_proofs_lists():
         with os.scandir(PROOFS_DIRECTORY) as proof_files:
