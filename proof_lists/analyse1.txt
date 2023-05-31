@@ -1,4 +1,4 @@
-12
+21
 1 41 True True
 Démontre que l'ensemble des solutions (à valeurs réelles) de $y^{\prime}=k y$ est $\left\{y: t \mapsto c e^{k t} ; c \in \mathbb{R}\right\}$
 4 42 True True
@@ -35,3 +35,27 @@ $z(x)=c_1 e^{\lambda_1 x}+c_2 e^{\lambda_2 x}$, où $c_1$ et $c_2 \in \mathbb{C}
 Dans le cas où le polynôme caractéristique a une racine double $\lambda$, càd $a_1^2-4 a_0=0$.
 Alors $\lambda=-\frac{a_1}{2}$ et $y_1(x):=e^{\lambda x}$ est solution de $y^{\prime \prime}+a_1 y^{\prime}+a_0 y=0$
 Vérifie que $y_2(x):=x e^{\lambda x}$ est aussi solution de l'EDLH, linéairement indépente de $y_1$
+2 53 True True
+Démontre que si $z$ est solution de l'EDLH (à coefficients réels): $y^{\prime \prime}+a_1 y^{\prime}+a_0 y=0$,
+alors $u:=\operatorname{Re} z$ et $v:=\operatorname{Im} z$ sont solutions réelles de l'EDLH.
+1 54 True True
+Démontre que la limite de $\bar{f}$ peut se calculer composante par composante.
+2 55 True True
+Démontre la proposition suivante :
+Soient $\vec{f}: I \subseteq \mathbb{R} \rightarrow \mathbb{R}^m$ et $\vec{g}: I \subseteq \mathbb{R} \rightarrow \mathbb{R}^m$. Si $\forall t \in I: \vec{f}(t) \perp \vec{g}(t) \Rightarrow\left\langle\vec{f}^{\prime}, \vec{g}\right\rangle=-\left\langle\vec{f}, \vec{g}^{\prime}\right\rangle$
+1 56 True True
+Soient $\vec{f}: I \subseteq \mathbb{R} \rightarrow \mathbb{R}^m$. Si $\forall t \in I:\|\vec{f}(t)\|=c(c \in \mathbb{R}) \Rightarrow\left\langle\vec{f}^{\prime}, \vec{f}\right\rangle=0$
+1 57 True True
+Si $\vec{f}:[a, b] \rightarrow \mathbb{R}^m$ est continue sur $[a, b]$ et dérivable sur $] a, b[$, alors $\exists c \in] a, b[:\|\vec{f}(b)-\vec{f}(a)\| \leq\|\overrightarrow{f^{\prime}}(c)\| \cdot|b-a|$
+2 58 True True
+Si $\Gamma$ est une courbe plane:
+Montre que :$\frac{d \vec{t}}{d s}=\kappa \vec{n}, \quad \frac{d \vec{n}}{d s}=-\kappa \vec{t}$ et donc $\left\|\frac{d \vec{t}}{d s}\right\|=\left\|\frac{d \vec{n}}{d s}\right\|=\kappa$
+3 59 False True
+Démontre les dérivées des formules de Frenet.
+(démo de la mort qui est on ne peut moins clair, j'ai demandé au prof et pour lui c'était clair donc jsp,
+regarde avec la correction si t'as vraiement envie de l'étudier)
+2 60 True True
+Montre les formules de Frenet avec le vecteur de Darboux $\dot{\mathcal{T}}=\vec{\omega} \times \mathcal{T}$
+(c'est pas une démo il faut juste appliquer)
+1 61 True True
+Démontre toutes les formules pratiques de $\vec{t}, \vec{b}, \vec{n},\kappa,\tau$ pour une paramétrisation birégulière et $C^{3}$
