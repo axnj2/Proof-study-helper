@@ -19,7 +19,9 @@
 import random
 import os
 from statistics import mean
-#from add_new_proof_to_list import load_file
+
+from IO_module import load_file
+from display_module import display_math
 
 try:
     import PIL
@@ -49,10 +51,6 @@ PROOFS_DIRECTORY = "proof_lists/"
 DATA_DIRECTORY = "data/"
 IMAGE_DIRECTORY = "images/"
 
-# constants for matplotlib LATEX display
-FONT_SIZE = 12
-FONT_COLOR = "black"
-DISPLAY_SHAPE = (12, 2) # a rectangle, width, height in inches
 
 # noinspection PyPep8
 ASCII_ART = r"""
@@ -68,15 +66,12 @@ ASCII_ART = r"""
 """
 
 
-def str2bool(v):
-    return v.lower() in ("yes", "true", "t", "1", "y")
+def discover_proofs_lists():
+    with os.scandir(PROOFS_DIRECTORY) as proof_files:
+        return [file.name for file in proof_files]
 
 
 def choose_proof_list():
-    def discover_proofs_lists():
-        with os.scandir(PROOFS_DIRECTORY) as proof_files:
-            return [file.name for file in proof_files]
-
     list_of_proofs_lists = discover_proofs_lists()
 
     print("Choisissez les démos à étudier :")
@@ -131,23 +126,6 @@ def initialize_files_path(proof_list_name):
     images_directory_path = IMAGE_DIRECTORY + proof_list_name[:-4] + "/"
 
     return proof_list_path, scores_file_path, stats_file_path, images_directory_path
-
-def load_file(proof_file_name) -> dict:
-    proofs_and_scores = dict()  # key: proof number, value: [proof text, score, stats, is_latex, has_answer_image]
-
-    with open(proof_file_name, 'r', encoding="utf-8") as f:
-        number_of_proofs = int(f.readline())
-        for i in range(number_of_proofs):
-            header = f.readline().split()
-            number_of_lines_in_proof, proof_number, is_latex, has_answer_image = int(header[0]), int(header[1]), str2bool(
-                header[2]), str2bool(header[3])
-            proof_text = r""
-            for j in range(number_of_lines_in_proof):
-                proof_text += f.readline()
-            proof_text = proof_text.strip("\n")
-            proofs_and_scores[proof_number] = [proof_text, None, None, is_latex, has_answer_image]
-
-    return proofs_and_scores
 
 
 def initialize_from_files(proofs_file, scores_file, stats_file):
@@ -333,15 +311,6 @@ def stats_interface(proofs_and_scores):  # currently broken
     ))
     if continue_status == 0:
         precise_stats(maxs, averages)
-
-
-def display_math(latex_code):
-    plt.figure(figsize=DISPLAY_SHAPE)
-    ax = plt.subplot()
-    plt.subplots_adjust(left=0)
-    ax.axis('off')
-    ax.text(0, 0, latex_code, fontsize=FONT_SIZE, color=FONT_COLOR)
-    plt.show()
 
 
 # noinspection PyPep8
