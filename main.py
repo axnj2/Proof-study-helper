@@ -43,7 +43,7 @@ except:
 
 # Constants for the algorithms choosing the next proof
 FACTORS_FOR_WEIGHTS_ADJUSTING = {"0": 1.5, "1": 0.75, "2": 0.5, "3": 0.1}
-MODES = {1: "random", 2: "new", 3: "stats"}
+MODES = {1: "random", 2: "new", 3: "stats", 4:"manual"}
 STARTING_WEIGHT = 1.0
 
 # directories
@@ -236,6 +236,8 @@ def choose_next_proof(current_mode, curent_proofs_and_scores):
             print(f"il reste {number_of_new} démonstration(s) pas encore faites")
     elif MODES[current_mode] == "random":
         next_proof = choose_with_weights(curent_proofs_and_scores)
+    elif MODES[current_mode] == "manual":
+        next_proof = int(input("Quelle démonstration veux tu faire ?\nInput : "))
 
     return next_proof, current_mode
 
@@ -246,6 +248,7 @@ def initialize_mode():
         "   1 : Faire des démonstrations aléatoirement\n"
         "   2 : Faire des démonstrations pas encore faites\n"
         "   3 : (ne fonctionne pas pour l'instant) Voir les statistiques de ma progression\n"
+        "   4 : Choisir les démos manuellement\n"
         "Input : "
     ))
     if user_input not in MODES:
@@ -353,6 +356,9 @@ if __name__ == "__main__":
         proofs_and_scores = initialize_from_files(proof_list_path, scores_file_path, stats_file_path)
 
         current_proof, mode = choose_next_proof(mode, proofs_and_scores)
+        
+        if current_proof not in proofs_and_scores.keys():
+            raise ValueError(f"Proof {current_proof} not found in proof list")
 
         render_proof(current_proof, proofs_and_scores, images_directory_path)
         success_assessment = input(
